@@ -3,8 +3,45 @@
  * This file serves as the entry point for the application.
  */
 
-// Import and run the server directly from the backend directory
-// The server is already configured and started in server.js
-require('./backend/server');
+const mongoose = require('mongoose');
+const path = require('path');
+const fs = require('fs');
 
-console.log('Application entry point loaded successfully.'); 
+// MongoDB connection string
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://whaiqal7:Wanzack123@lovelynursinghome.sbhoe2w.mongodb.net/lovely_nursing_home?retryWrites=true&w=majority&appName=LovelyNursingHome';
+
+// Connect to MongoDB Atlas
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB Atlas");
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err.message);
+  });
+
+// Import the Express app from backend/server.js
+const app = require('./backend/server');
+
+// Add additional debugging routes
+app.get('/test-connection', (req, res) => {
+  res.send('Server connection test successful!');
+});
+
+// Add a catch-all route for HTML files
+app.get('*.html', (req, res) => {
+  const filePath = path.join(__dirname, 'frontend/public', req.path);
+  console.log('Requested HTML file:', filePath);
+  
+  if (fs.existsSync(filePath)) {
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send('File not found: ' + req.path);
+  }
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  console.log(`Static files being served from: ${path.join(__dirname, 'frontend/public')}`);
+}); 

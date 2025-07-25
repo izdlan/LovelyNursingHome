@@ -16,34 +16,31 @@ const feedbackRoute = require('./routes/feedback');
 const donorRoutes = require('./routes/donor');
 require('./services/emailNotifier');
 
+// Create Express app but don't start it (it will be started by index.js)
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-console.log('MONGODB_URI:', process.env.MONGODB_URI);
-
-// ✅ MongoDB connection string - Use environment variable in production
-const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://whaiqal7:Wanzack123@lovelynursinghome.sbhoe2w.mongodb.net/lovely_nursing_home?retryWrites=true&w=majority&appName=LovelyNursingHome';
-
-// ✅ Connect to MongoDB Atlas
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
-  console.log("✅ Connected to MongoDB Atlas");
-}).catch((err) => {
-  console.error("❌ MongoDB connection error:", err.message);
-});
+// MongoDB connection is now handled in index.js
 
 // ✅ Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// Update static file serving to be more explicit
 app.use(express.static(path.join(__dirname, '../frontend/public')));
+// Add debugging for static file serving
+console.log('Static files directory:', path.join(__dirname, '../frontend/public'));
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secretkey',
   resave: false,
   saveUninitialized: true
 }));
+
+// Add explicit route for the root path
+app.get('/', (req, res) => {
+  const indexPath = path.join(__dirname, '../frontend/public/index.html');
+  console.log('Serving index.html from:', indexPath);
+  res.sendFile(indexPath);
+});
 
 // ✅ Volunteer Login
 app.post('/volunteer/login', async (req, res) => {
@@ -132,7 +129,5 @@ app.use('/donate', donateRoutes);
 app.use('/feedback', feedbackRoute);
 app.use('/donor', donorRoutes);
 
-// ✅ Start the server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-});
+// Export the app to be used in index.js
+module.exports = app;
