@@ -8,7 +8,11 @@
     "dev": "node index.js",
     "build": "echo 'No build step required'"
   },
-  "keywords": ["nursing-home", "volunteer-management", "donation-system"],
+  "keywords": [
+    "nursing-home",
+    "volunteer-management",
+    "donation-system"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "engines": {
@@ -17,6 +21,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
+    "connect-mongo": "^5.1.0",
     "dotenv": "^16.5.0",
     "express": "^4.18.2",
     "express-session": "^1.18.1",

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const bcrypt = require('bcryptjs');
 const Admin = require('./models/Admin'); 
 const Donation = require('./models/Donation');
@@ -32,7 +33,15 @@ console.log('Static files directory:', path.join(__dirname, '../frontend/public'
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secretkey',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI || 'mongodb+srv://whaiqal7:Wanzack123@lovelynursinghome.sbhoe2w.mongodb.net/lovely_nursing_home?retryWrites=true&w=majority&appName=LovelyNursingHome',
+    ttl: 14 * 24 * 60 * 60 // 14 days session expiration
+  }),
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+  }
 }));
 
 // Add explicit route for the root path
