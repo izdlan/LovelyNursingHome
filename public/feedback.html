@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Lovely Nursing Home</title>
+    <link rel="stylesheet" href="styles2.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      body {
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+        margin: 0;
+        padding: 0;
+        color: #222;
+      }
+      header {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        padding: 0;
+        box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+      .main-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+        padding: 0 48px;
+      }
+      .main-nav ul {
+        display: flex;
+        gap: 36px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .main-nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.12rem;
+        letter-spacing: 0.01em;
+        transition: color 0.2s;
+      }
+      .main-nav ul li a:hover {
+        color: #c7d2fe;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+        min-height: 70vh;
+        padding-top: 70px;
+      }
+      .feedback-form {
+        background: #fff;
+        padding: 36px 32px 28px 32px;
+        border-radius: 14px;
+        box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+        min-width: 320px;
+        max-width: 480px;
+        margin: 40px auto 0 auto;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+      }
+      input[type="text"],
+      input[type="email"],
+      textarea {
+        padding: 12px 10px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 7px;
+        font-size: 1rem;
+        background: #f8fafc;
+        margin-bottom: 16px;
+        margin-top: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border 0.2s;
+        resize: vertical;
+      }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      textarea:focus {
+        border: 1.5px solid #3578c7;
+        outline: none;
+        background: #fff;
+      }
+      button[type="submit"] {
+        background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+        color: #fff;
+        border: none;
+        padding: 13px 0;
+        border-radius: 7px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.2s, box-shadow 0.2s;
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+      }
+      button[type="submit"]:hover {
+        background: #0056b3;
+        box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+      }
+      #feedbackMsg {
+        margin-top: 12px;
+        color: #d32f2f;
+        font-weight: 600;
+        min-height: 24px;
+      }
+      footer {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        color: #fff;
+        text-align: center;
+        padding: 24px 0;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 -2px 8px rgba(53,120,199,0.07);
+        margin-top: 40px;
+        font-size: 1.08rem;
+        letter-spacing: 0.01em;
+      }
+      @media (max-width: 600px) {
+        .main-nav {
+          padding: 0 8px;
+        }
+        .main-nav ul {
+          gap: 12px;
+        }
+        .feedback-form {
+          padding: 18px 6px 14px 6px;
+          margin: 20px 4px 0 4px;
+        }
+        main {
+          padding-top: 80px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <header>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="volunteer_login.html">Volunteer</a></li>
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="feedback-form">
+        <h2>Feedback Form</h2>
+        <form id="feedbackForm" action="/feedback" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+
+            <button type="submit">Submit Feedback</button>
+        </form>
+        <div id="feedbackMsg"></div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const msgDiv = document.getElementById('feedbackMsg');
+            
+            try {
+                const data = {
+                    name: form.name.value,
+                    email: form.email.value,
+                    message: form.message.value
+                };
+                
+                console.log('Sending feedback data:', data);
+                
+                const res = await fetch('/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Response status:', res.status);
+                
+                if (res.ok) {
+                    const result = await res.json();
+                    msgDiv.style.color = '#2563eb';
+                    msgDiv.textContent = result.message || 'Thank you for your feedback!';
+                    form.reset();
+                } else {
+                    const errorData = await res.json().catch(() => ({}));
+                    console.error('Error response:', errorData);
+                    msgDiv.style.color = '#d32f2f';
+                    msgDiv.textContent = errorData.message ? `Error: ${errorData.message}` : `HTTP ${res.status}: There was an error submitting your feedback.`;
+                    if (errorData.error) {
+                        msgDiv.textContent += ` (${errorData.error.message || errorData.error})`;
+                    }
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                msgDiv.style.color = '#d32f2f';
+                msgDiv.textContent = `Network error: ${error.message}. Please check if the server is running.`;
+            }
+        });
+    </script>
+</body>
+</html>

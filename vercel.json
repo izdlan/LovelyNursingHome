@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "name": "lovely-nursing-home",
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/admin/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/volunteer/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/donate",
+      "dest": "server.js"
+    },
+    {
+      "src": "/feedback",
+      "dest": "server.js"
+    },
+    {
+      "src": "/donor",
+      "dest": "server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ]
+} 

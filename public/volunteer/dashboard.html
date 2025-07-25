@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Volunteer Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      height: 60px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 2px 8px #3578c733;
+    }
+    header nav {
+      display: flex;
+      gap: 32px;
+      background: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    header nav a {
+      color: white;
+      background: none;
+      border-radius: 0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.12rem;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+    }
+    header nav a:hover {
+      color: #c7d2fe;
+      background: none;
+    }
+    header nav a:last-child {
+      color: #e0e0e0;
+      background: none;
+    }
+    header nav a:last-child:hover {
+      color: #fff;
+      background: none;
+    }
+    main {
+      padding: 20px;
+      margin-top: 80px;
+    }
+    .activity-card {
+      display: flex;
+      align-items: flex-start;
+      border: 1.5px solid #cfd8e8;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+    }
+    .activity-card img {
+      width:  220px;
+      height: auto;
+      border-radius: 8px;
+      margin-right: 20px;
+      margin-bottom: 0;
+      display: block;
+      object-fit: cover;
+    }
+    .activity-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    button {
+      background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+    }
+    button:hover {
+      background: #0056b3;
+      box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+    }
+    .calendar {
+      margin-top: 30px;
+      padding: 15px;
+      background: #ffffff;
+      border: 1.5px solid #cfd8e8;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+    }
+    @media (max-width: 600px) {
+      header {
+        padding: 0 8px;
+        height: auto;
+      }
+      nav {
+        gap: 12px;
+      }
+      .activity-card img {
+        width: 100px;
+      }
+      .activity-card {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav style="margin: 0 auto;">
+      <a href="/volunteer/dashboard.html">Dashboard</a>
+      <a href="/volunteer/calendar.html">Calendar</a>
+      <a href="/volunteer_login.html">Logout</a>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2 style="color: #000000; margin: 24px 0 12px 32px; text-align: left;">Available Activities</h2>
+      <div id="activities-list">
+        <!-- Activities will be loaded here -->
+      </div>
+    </section>
+
+    <section class="calendar">
+      <h2 style="color: #000000; margin-bottom: 12px;">Your Booked Activities</h2>
+      <div id="calendar" style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 24px; margin: 0 16px; min-width: 320px; max-width: 900px; overflow-x: auto;"></div>
+    </section>
+  </main>
+
+  <script>
+    // Fetch and display available activities
+    fetch('/volunteer/api/activities')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('activities-list');
+        if (data.length === 0) {
+          list.innerHTML = '<p>No volunteer activities available at the moment.</p>';
+          return;
+        }
+        data.forEach(activity => {
+          const card = document.createElement('div');
+          card.className = 'activity-card';
+
+          const imagePath = activity.image ? activity.image : '/images/default.jpg'; // Fallback image
+
+          card.innerHTML = `
+            <img src="${imagePath}" alt="Activity Image" />
+            <div class="activity-details">
+              <h3>${activity.title}</h3>
+              <p><strong>Date:</strong> ${new Date(activity.date).toLocaleDateString()}</p>
+              <p><strong>Time:</strong> ${activity.time || '-'}</p>
+              <p><strong>Slots:</strong> ${activity.slots || '-'}</p>
+              <p>${activity.description}</p>
+              <button onclick="bookActivity('${activity._id}')">Book</button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+      });
+
+    function bookActivity(activityId) {
+      showBookingConfirmModal(activityId);
+    }
+
+    // Show a styled confirmation modal before booking
+    function showBookingConfirmModal(activityId) {
+      let modal = document.getElementById('booking-confirm-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'booking-confirm-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.35)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '3000';
+        modal.innerHTML = `
+          <div style="background:#fff; padding:36px 32px; border-radius:14px; box-shadow:0 4px 24px rgba(53,120,199,0.13); text-align:center; min-width:320px; max-width:90vw;">
+            <h2 style='color:#3578c7; margin-bottom:18px;'>Confirm Booking</h2>
+            <p style='color:#475569; font-size:1.1rem; margin-bottom:24px;'>Are you sure you want to book this activity?</p>
+            <button id='confirm-book-btn' style='margin:0 12px 0 0; padding:10px 28px;' class='btn'>Yes, Book</button>
+            <button id='cancel-book-btn' style='padding:10px 28px; background:#e0e7ef; color:#3578c7; font-weight:600; border-radius:7px; border:none; cursor:pointer;'>Cancel</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      } else {
+        modal.style.display = 'flex';
+      }
+      document.getElementById('confirm-book-btn').onclick = function() {
+        modal.style.display = 'none';
+        proceedBookActivity(activityId);
+      };
+      document.getElementById('cancel-book-btn').onclick = function() {
+        modal.style.display = 'none';
+      };
+    }
+
+    function proceedBookActivity(activityId) {
+      fetch('/volunteer/book-activity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ activityId })
+      })
+        .then(res => res.text())
+        .then(msg => {
+          showDashboardConfirmation('Booking submitted!');
+          setTimeout(() => location.reload(), 1800);
+        });
+    }
+
+    // Show a styled confirmation message at the top of the page
+    function showDashboardConfirmation(message) {
+      let msgDiv = document.getElementById('dashboard-confirmation');
+      if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'dashboard-confirmation';
+        msgDiv.style.position = 'fixed';
+        msgDiv.style.top = '80px';
+        msgDiv.style.left = '50%';
+        msgDiv.style.transform = 'translateX(-50%)';
+        msgDiv.style.background = 'linear-gradient(90deg, #3578c7 0%, #004080 100%)';
+        msgDiv.style.color = '#fff';
+        msgDiv.style.padding = '16px 32px';
+        msgDiv.style.borderRadius = '8px';
+        msgDiv.style.fontWeight = '600';
+        msgDiv.style.fontSize = '1.1rem';
+        msgDiv.style.boxShadow = '0 2px 8px rgba(53,120,199,0.13)';
+        msgDiv.style.zIndex = '2000';
+        document.body.appendChild(msgDiv);
+      }
+      msgDiv.textContent = message;
+      msgDiv.style.display = 'block';
+      setTimeout(() => {
+        msgDiv.style.display = 'none';
+      }, 1500);
+    }
+
+    // Load volunteer's booked activities
+    fetch('/volunteer/my-bookings')
+      .then(res => res.json())
+      .then(data => {
+        const calendar = document.getElementById('calendar');
+        if (data.length === 0) {
+          calendar.innerHTML = '<p>No booked activities yet.</p>';
+          return;
+        }
+        const table = document.createElement('table');
+        table.style.width = '100%';
+        table.style.borderCollapse = 'collapse';
+        table.style.background = '#fff';
+        table.style.borderRadius = '8px';
+        table.style.overflow = 'hidden';
+        table.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
+        table.innerHTML = `
+          <thead style="background: #2563eb; color: #fff;">
+            <tr><th style="padding: 12px;">Activity</th><th style="padding: 12px;">Date</th><th style="padding: 12px;">Time</th><th style="padding: 12px;">Status</th></tr>
+          </thead>
+          <tbody>
+            ${data.map(b => `<tr><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.title || '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.date ? new Date(b.activity.date).toLocaleDateString() : '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.time || '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.status}</td></tr>`).join('')}
+          </tbody>
+        `;
+        calendar.innerHTML = '';
+        calendar.appendChild(table);
+      });
+  </script>
+  <footer>
+    <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

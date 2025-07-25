@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard - Lovely Nursing Home</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      height: 60px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 2px 8px #3578c733;
+    }
+    header nav {
+      display: flex;
+      gap: 32px;
+      background: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    header nav a {
+      color: white;
+      background: none;
+      border-radius: 0;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.12rem;
+      letter-spacing: 0.01em;
+      transition: color 0.2s;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+    }
+    header nav a:hover {
+      color: #c7d2fe;
+      background: none;
+    }
+    header nav a:last-child {
+      color: #e0e0e0;
+      background: none;
+    }
+    header nav a:last-child:hover {
+      color: #fff;
+      background: none;
+    }
+    main {
+      padding: 20px;
+      margin-top: 80px;
+    }
+    h2 {
+      color: #3578c7;
+      text-shadow: 0 2px 8px #cfd8e833;
+    }
+    .activity-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(53, 120, 199, 0.08);
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(53, 120, 199, 0.08);
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    button {
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+    }
+    button:hover {
+      background: #0056b3;
+      color: #fff;
+      opacity: 0.95;
+    }
+    .add-activity-btn {
+      margin-bottom: 20px;
+      display: inline-block;
+      background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+    }
+    .add-activity-btn:hover {
+      background: #0056b3;
+      color: #fff;
+    }
+    .approve {
+      background: #28a745;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+    }
+    .approve:hover {
+      background: #218838;
+      color: #fff;
+    }
+    .reject {
+      background: #dc3545;
+      color: white;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(220,53,69,0.08);
+    }
+    .reject:hover {
+      background: #c82333;
+      color: #fff;
+    }
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+      }
+      header nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+      }
+      header nav a {
+        font-size: 14px;
+        padding: 6px 12px;
+        margin-right: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav style="margin: 0 auto;">
+      <a href="/admin/dashboard.html">Dashboard</a>
+      <a href="/admin/pending_volunteers.html">Pending Volunteers</a>
+      <a href="/admin/all_donations.html">All Donations</a>
+      <a href="/admin/add_activity.html">Add New Activity</a>
+      <a href="/admin/register_user.html">Register User</a>
+      <a href="/admin/volunteer_calendar.html">Volunteer Calendar</a>
+      <a href="/admin/feedbacks.html">User Feedbacks</a>
+      <a href="/admin_login.html">Logout</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Activities</h2>
+    <div id="activities-list"></div>
+  </main>
+
+  <script>
+    async function fetchActivitiesAndBookings() {
+      const res = await fetch('/admin/api/activities');
+      const activities = await res.json();
+      const list = document.getElementById('activities-list');
+      list.innerHTML = '';
+      for (const activity of activities) {
+        const card = document.createElement('div');
+        card.className = 'activity-card';
+        if (activity.status === 'archived') {
+          card.style.backgroundColor = '#f0f0f0';
+          card.style.opacity = '0.6';
+        }
+        card.innerHTML = `
+          <h3>${activity.title} ${activity.status === 'archived' ? '(Archived)' : ''}</h3>
+          <p><strong>Date:</strong> ${new Date(activity.date).toLocaleDateString()}</p>
+          <p><strong>Time:</strong> ${activity.time || '-'}</p>
+          <p><strong>Slots:</strong> <span class="slots">${activity.slots}</span></p>
+          <p>${activity.description}</p>
+          <button onclick="editActivity('${activity._id}')">Edit</button>
+          ${activity.status === 'active' 
+            ? `<button class="reject" onclick="updateActivityStatus('${activity._id}', 'archived')">Delete</button>`
+            : `<button class="approve" onclick="updateActivityStatus('${activity._id}', 'active')">Restore</button>`
+          }
+          <div class="bookings"><em>Loading recent bookings...</em></div>
+        `;
+        list.appendChild(card);
+        // Fetch bookings for this activity
+        const bookingsRes = await fetch(`/admin/api/activities/${activity._id}/bookings`);
+        const bookings = await bookingsRes.json();
+        const bookingsDiv = card.querySelector('.bookings');
+        if (bookings.length === 0) {
+          bookingsDiv.innerHTML = '<em>No recent bookings.</em>';
+        } else {
+          const table = document.createElement('table');
+          table.innerHTML = `
+            <thead><tr><th>Volunteer Name</th><th>Email</th><th>Booked At</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody>
+              ${bookings.map(b => `<tr><td>${b.volunteer?.fullName || '-'}<\/td><td>${b.volunteer?.email || '-'}<\/td><td>${new Date(b.bookedAt).toLocaleString()}<\/td><td>${b.status}<\/td><td>${b.status === 'pending' ? `<button class='approve' onclick=\"updateBookingStatus('${b._id}','approved')\">Approve<\/button> <button class='reject' onclick=\"updateBookingStatus('${b._id}','rejected')\">Reject<\/button>` : ''}<\/td><\/tr>`).join('')}
+            </tbody>
+          `;
+          bookingsDiv.innerHTML = '<h4>Recent Bookings</h4>';
+          bookingsDiv.appendChild(table);
+        }
+      }
+    }
+    fetchActivitiesAndBookings();
+
+    window.editActivity = function(activityId) {
+      window.location.href = `/admin/edit_activity.html?id=${activityId}`;
+    };
+
+    window.updateActivityStatus = async function(activityId, status) {
+      showActivityConfirmModal(activityId, status);
+    }
+
+    // Show a styled confirmation modal before archiving/restoring activity
+    function showActivityConfirmModal(activityId, status) {
+      let modal = document.getElementById('activity-confirm-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'activity-confirm-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.35)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '3000';
+        modal.innerHTML = `
+          <div style="background:#fff; padding:36px 32px; border-radius:14px; box-shadow:0 4px 24px rgba(53,120,199,0.13); text-align:center; min-width:320px; max-width:90vw;">
+            <h2 style='color:#3578c7; margin-bottom:18px;'>Confirm ${status === 'archived' ? 'Delete' : 'Restore'}</h2>
+            <p style='color:#475569; font-size:1.1rem; margin-bottom:24px;'>Are you sure you want to ${status === 'archived' ? 'delete' : 'restore'} this activity?</p>
+            <button id='confirm-activity-btn' style='margin:0 12px 0 0; padding:10px 28px;' class='btn'>Yes, ${status === 'archived' ? 'Delete' : 'Restore'}</button>
+            <button id='cancel-activity-btn' style='padding:10px 28px; background:#e0e7ef; color:#3578c7; font-weight:600; border-radius:7px; border:none; cursor:pointer;'>Cancel</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      } else {
+        modal.style.display = 'flex';
+        modal.querySelector('h2').textContent = `Confirm ${status === 'archived' ? 'Delete' : 'Restore'}`;
+        modal.querySelector('p').textContent = `Are you sure you want to ${status === 'archived' ? 'delete' : 'restore'} this activity?`;
+        modal.querySelector('#confirm-activity-btn').textContent = `Yes, ${status === 'archived' ? 'Delete' : 'Restore'}`;
+      }
+      document.getElementById('confirm-activity-btn').onclick = function() {
+        modal.style.display = 'none';
+        proceedActivityStatus(activityId, status);
+      };
+      document.getElementById('cancel-activity-btn').onclick = function() {
+        modal.style.display = 'none';
+      };
+    }
+
+    function proceedActivityStatus(activityId, status) {
+      fetch(`/admin/api/activities/${activityId}/status`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ status })
+      }).then(response => {
+        if (response.ok) {
+          showDashboardConfirmation(`Activity ${status === 'archived' ? 'deleted' : status + 'd'} successfully.`);
+          fetchActivitiesAndBookings();
+        } else {
+          response.json().then(result => {
+            showDashboardConfirmation(`Failed to update activity: ${result.message}`);
+          });
+        }
+      }).catch(err => {
+        showDashboardConfirmation('An error occurred while updating the activity status.');
+      });
+    }
+
+    // Add updateBookingStatus function
+    window.updateBookingStatus = async function(bookingId, status) {
+      showBookingConfirmModal(bookingId, status);
+    }
+
+    // Show a styled confirmation modal before approving/rejecting booking
+    function showBookingConfirmModal(bookingId, status) {
+      let modal = document.getElementById('booking-confirm-modal');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'booking-confirm-modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100vw';
+        modal.style.height = '100vh';
+        modal.style.background = 'rgba(0,0,0,0.35)';
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.style.zIndex = '3000';
+        modal.innerHTML = `
+          <div style="background:#fff; padding:36px 32px; border-radius:14px; box-shadow:0 4px 24px rgba(53,120,199,0.13); text-align:center; min-width:320px; max-width:90vw;">
+            <h2 style='color:#3578c7; margin-bottom:18px;'>Confirm ${status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+            <p style='color:#475569; font-size:1.1rem; margin-bottom:24px;'>Are you sure you want to ${status} this booking?</p>
+            <button id='confirm-book-btn' style='margin:0 12px 0 0; padding:10px 28px;' class='btn'>Yes, ${status.charAt(0).toUpperCase() + status.slice(1)}</button>
+            <button id='cancel-book-btn' style='padding:10px 28px; background:#e0e7ef; color:#3578c7; font-weight:600; border-radius:7px; border:none; cursor:pointer;'>Cancel</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+      } else {
+        modal.style.display = 'flex';
+        modal.querySelector('h2').textContent = `Confirm ${status.charAt(0).toUpperCase() + status.slice(1)}`;
+        modal.querySelector('p').textContent = `Are you sure you want to ${status} this booking?`;
+        modal.querySelector('#confirm-book-btn').textContent = `Yes, ${status.charAt(0).toUpperCase() + status.slice(1)}`;
+      }
+      document.getElementById('confirm-book-btn').onclick = function() {
+        modal.style.display = 'none';
+        proceedBookingStatus(bookingId, status);
+      };
+      document.getElementById('cancel-book-btn').onclick = function() {
+        modal.style.display = 'none';
+      };
+    }
+
+    function proceedBookingStatus(bookingId, status) {
+      fetch(`/admin/api/bookings/${bookingId}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      }).then(() => {
+        showDashboardConfirmation(`Booking ${status}`);
+      fetchActivitiesAndBookings();
+      });
+    }
+
+    // Show a styled confirmation message at the top of the page
+    function showDashboardConfirmation(message) {
+      let msgDiv = document.getElementById('dashboard-confirmation');
+      if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'dashboard-confirmation';
+        msgDiv.style.position = 'fixed';
+        msgDiv.style.top = '80px';
+        msgDiv.style.left = '50%';
+        msgDiv.style.transform = 'translateX(-50%)';
+        msgDiv.style.background = 'linear-gradient(90deg, #3578c7 0%, #004080 100%)';
+        msgDiv.style.color = '#fff';
+        msgDiv.style.padding = '16px 32px';
+        msgDiv.style.borderRadius = '8px';
+        msgDiv.style.fontWeight = '600';
+        msgDiv.style.fontSize = '1.1rem';
+        msgDiv.style.boxShadow = '0 2px 8px rgba(53,120,199,0.13)';
+        msgDiv.style.zIndex = '2000';
+        document.body.appendChild(msgDiv);
+      }
+      msgDiv.textContent = message;
+      msgDiv.style.display = 'block';
+      setTimeout(() => {
+        msgDiv.style.display = 'none';
+      }, 2500);
+    }
+  </script>
+</body>
+</html>

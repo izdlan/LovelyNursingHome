@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate - Lovely Nursing Home</title>
+    <link rel="stylesheet" href="styles2.css">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+      body {
+        font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+        margin: 0;
+        padding: 0;
+        color: #222;
+      }
+      header {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        padding: 0;
+        box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      }
+      .main-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+        padding: 0 48px;
+      }
+      .main-nav ul {
+        display: flex;
+        gap: 36px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .main-nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.12rem;
+        letter-spacing: 0.01em;
+        transition: color 0.2s;
+      }
+      .main-nav ul li a:hover {
+        color: #c7d2fe;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 40px;
+        min-height: 70vh;
+        padding-top: 70px;
+      }
+      .donation-form {
+        background: #fff;
+        padding: 36px 32px 28px 32px;
+        border-radius: 14px;
+        box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+        min-width: 320px;
+        max-width: 480px;
+        margin: 40px auto 0 auto;
+      }
+      fieldset {
+        border-radius: 7px;
+        border: 1.5px solid #cbd5e1;
+        margin-bottom: 18px;
+        padding: 14px 16px 10px 16px;
+        background: #f8fafc;
+      }
+      legend {
+        font-weight: 600;
+        color: #3578c7;
+        font-size: 1.08rem;
+        margin-bottom: 6px;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="number"] {
+        padding: 12px 10px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 7px;
+        font-size: 1rem;
+        background: #f8fafc;
+        margin-bottom: 10px;
+        margin-top: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border 0.2s;
+      }
+      input[type="text"]:focus,
+      input[type="email"]:focus,
+      input[type="number"]:focus {
+        border: 1.5px solid #3578c7;
+        outline: none;
+        background: #fff;
+      }
+      input[type="radio"],
+      input[type="checkbox"] {
+        margin-right: 7px;
+        accent-color: #3578c7;
+      }
+      select {
+        padding: 12px 10px;
+        border: 1.5px solid #cbd5e1;
+        border-radius: 7px;
+        font-size: 1rem;
+        background: #f8fafc;
+        margin-bottom: 10px;
+        margin-top: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border 0.2s;
+      }
+      select:focus {
+        border: 1.5px solid #3578c7;
+        outline: none;
+        background: #fff;
+      }
+      .payment-details {
+        transition: all 0.3s ease;
+      }
+      .payment-details.hidden {
+        display: none !important;
+      }
+      button[type="submit"] {
+        background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+        color: #fff;
+        border: none;
+        padding: 13px 0;
+        border-radius: 7px;
+        font-size: 1.08rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.2s, box-shadow 0.2s;
+        width: 100%;
+        box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+      }
+      button[type="submit"]:hover {
+        background: #0056b3;
+        box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+      }
+      footer {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        color: #fff;
+        text-align: center;
+        padding: 24px 0;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 -2px 8px rgba(53,120,199,0.07);
+        margin-top: 40px;
+        font-size: 1.08rem;
+        letter-spacing: 0.01em;
+      }
+      @media (max-width: 600px) {
+        .main-nav {
+          padding: 0 8px;
+        }
+        .main-nav ul {
+          gap: 12px;
+        }
+        .donation-form {
+          padding: 18px 6px 14px 6px;
+          margin: 20px 4px 0 4px;
+        }
+        main {
+          padding-top: 80px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <header>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="volunteer_login.html">Volunteer</a></li>
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="feedback.html">Feedback</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="donation-form">
+        <h2>Donation Form</h2>
+        <p>Thank you for your interest in making a donation. For corporate donations, kindly reach out to us via Whatsapp : +6013-6281083</p>
+        <form action="/donate" method="POST">
+          <fieldset>
+            <legend>My Particulars</legend>
+            <label>Title:</label>
+            <input type="radio" name="title" value="Mr"> Mr
+            <input type="radio" name="title" value="Mrs"> Mrs
+            <input type="radio" name="title" value="Mdm"> Mdm
+            <input type="radio" name="title" value="Ms"> Ms
+            <br>
+            <input type="text" name="surname" placeholder="Surname" required>
+            <input type="text" name="given_name" placeholder="Given Name" required>
+            <input type="text" name="nric" placeholder="NRIC (Optional)">
+            <input type="text" name="contact" placeholder="Contact No." required>
+            <input type="email" name="email" placeholder="Email" required>
+          </fieldset>
+          <fieldset>
+            <legend>My Gift</legend>
+            <label>Donation Type:</label>
+            <input type="radio" name="donation_type" value="one-time" checked> One-Time Donation
+            <input type="radio" name="donation_type" value="monthly"> Monthly Donation
+            <br>
+            <input type="number" name="donation_amount" placeholder="Donation Amount (RM)" required min="1">
+          </fieldset>
+          <fieldset>
+            <legend>Payment Mode</legend>
+            <input type="radio" name="payment_mode" value="visa" checked> Visa/MasterCard
+            <input type="radio" name="payment_mode" value="online"> FPX (Online Banking)
+            <input type="radio" name="payment_mode" value="qrpay"> QRPay
+          </fieldset>
+
+          <!-- Visa/MasterCard Payment Details -->
+          <fieldset id="card-payment" class="payment-details">
+            <legend>Card Details</legend>
+            <input type="text" name="card_number" placeholder="Card Number (16 digits)" maxlength="16" pattern="[0-9]{16}">
+            <div style="display: flex; gap: 10px;">
+              <input type="text" name="expiry_month" placeholder="MM" maxlength="2" pattern="[0-9]{2}" style="width: 50%;">
+              <input type="text" name="expiry_year" placeholder="YY" maxlength="2" pattern="[0-9]{2}" style="width: 50%;">
+            </div>
+            <input type="text" name="cvv" placeholder="CVV (3 digits)" maxlength="3" pattern="[0-9]{3}">
+            <input type="text" name="card_holder" placeholder="Card Holder Name">
+          </fieldset>
+
+          <!-- FPX Payment Details -->
+          <fieldset id="fpx-payment" class="payment-details" style="display: none;">
+            <legend>FPX (Online Banking) Details</legend>
+            <select name="bank_name" required>
+              <option value="">Select Your Bank</option>
+              <option value="maybank">Maybank</option>
+              <option value="cimb">CIMB Bank</option>
+              <option value="public">Public Bank</option>
+              <option value="rhb">RHB Bank</option>
+              <option value="hongleong">Hong Leong Bank</option>
+              <option value="ambank">AmBank</option>
+              <option value="alliance">Alliance Bank</option>
+              <option value="affin">Affin Bank</option>
+              <option value="bankislam">Bank Islam</option>
+              <option value="bsn">BSN</option>
+            </select>
+            <p style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+              You will be redirected to your bank's secure payment page to complete the transaction.
+            </p>
+          </fieldset>
+
+          <!-- QRPay Payment Details -->
+          <fieldset id="qrpay-payment" class="payment-details" style="display: none;">
+            <legend>QRPay Details</legend>
+            <div style="text-align: center; padding: 20px;">
+              <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
+                <p style="margin: 0; font-weight: bold; color: #3578c7;">Scan QR Code to Pay</p>
+                <p style="margin: 5px 0; font-size: 0.9rem; color: #666;">Amount: RM <span id="qr-amount">0</span></p>
+                <div style="background: white; padding: 15px; border-radius: 5px; display: inline-block;">
+                  <div style="width: 120px; height: 120px; background: #ddd; border-radius: 5px; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <span style="color: #999; font-size: 0.8rem;">QR Code</span>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size: 0.9rem; color: #666; margin: 0;">
+                Use your preferred e-wallet app to scan the QR code above.
+              </p>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Consent</legend>
+            <label>
+              <input type="checkbox" name="consent" value="yes" id="consent-checkbox"> I consent to the use of my personal data and allow my name to be displayed publicly as a donor
+            </label>
+            <p style="font-size: 0.9rem; color: #666; margin: 10px 0;">
+              If you do not consent, your donation will be listed as "Anonymous" on our donor list.
+            </p>
+          </fieldset>
+          <button type="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
+    </footer>
+    <script>
+        // Payment method switching
+        const paymentMethods = document.querySelectorAll('input[name="payment_mode"]');
+        const paymentDetails = document.querySelectorAll('.payment-details');
+
+        function showPaymentDetails(method) {
+            // Hide all payment details
+            paymentDetails.forEach(detail => {
+                detail.style.display = 'none';
+            });
+
+            // Show selected payment method details
+            switch(method) {
+                case 'visa':
+                    document.getElementById('card-payment').style.display = 'block';
+                    break;
+                case 'online':
+                    document.getElementById('fpx-payment').style.display = 'block';
+                    break;
+                case 'qrpay':
+                    document.getElementById('qrpay-payment').style.display = 'block';
+                    break;
+            }
+        }
+
+        // Add event listeners to payment method radio buttons
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', (e) => {
+                showPaymentDetails(e.target.value);
+            });
+        });
+
+        // Update QR amount when donation amount changes
+        const donationAmount = document.querySelector('input[name="donation_amount"]');
+        const qrAmount = document.getElementById('qr-amount');
+
+        donationAmount.addEventListener('input', (e) => {
+            qrAmount.textContent = e.target.value || '0';
+        });
+
+        // Card number formatting
+        const cardNumber = document.querySelector('input[name="card_number"]');
+        cardNumber.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 16) value = value.slice(0, 16);
+            e.target.value = value;
+        });
+
+        // Expiry month validation
+        const expiryMonth = document.querySelector('input[name="expiry_month"]');
+        expiryMonth.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value > 12) value = 12;
+            if (value.length > 2) value = value.slice(0, 2);
+            e.target.value = value;
+        });
+
+        // Expiry year validation
+        const expiryYear = document.querySelector('input[name="expiry_year"]');
+        expiryYear.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 2) value = value.slice(0, 2);
+            e.target.value = value;
+        });
+
+        // CVV validation
+        const cvv = document.querySelector('input[name="cvv"]');
+        cvv.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 3) value = value.slice(0, 3);
+            e.target.value = value;
+        });
+
+        // Form submission with validation
+        document.querySelector('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const donationAmount = formData.get('donation_amount');
+            if (donationAmount <= 0) {
+              showConfirmation('Donation amount must be greater than zero.', false);
+              return;
+            }
+            const paymentMode = formData.get('payment_mode');
+            const consent = formData.get('consent');
+            
+            // Handle consent logic - if no consent, use "Anonymous"
+            if (consent !== 'yes') {
+                formData.set('surname', 'Anonymous');
+                formData.set('given_name', '');
+                formData.set('title', '');
+            }
+            
+            // Validate payment details based on selected method
+            let isValid = true;
+            let errorMessage = '';
+
+            if (paymentMode === 'visa') {
+                const cardNumber = formData.get('card_number');
+                const expiryMonth = formData.get('expiry_month');
+                const expiryYear = formData.get('expiry_year');
+                const cvv = formData.get('cvv');
+                const cardHolder = formData.get('card_holder');
+
+                if (!cardNumber || cardNumber.length !== 16) {
+                    errorMessage = 'Please enter a valid 16-digit card number';
+                    isValid = false;
+                } else if (!expiryMonth || !expiryYear) {
+                    errorMessage = 'Please enter card expiry date';
+                    isValid = false;
+                } else if (!cvv || cvv.length !== 3) {
+                    errorMessage = 'Please enter a valid 3-digit CVV';
+                    isValid = false;
+                } else if (!cardHolder) {
+                    errorMessage = 'Please enter card holder name';
+                    isValid = false;
+                }
+            } else if (paymentMode === 'online') {
+                const bankName = formData.get('bank_name');
+                if (!bankName) {
+                    errorMessage = 'Please select your bank';
+                    isValid = false;
+                }
+            }
+
+            if (!isValid) {
+                showConfirmation(errorMessage, false);
+                return;
+            }
+
+            try {
+                const response = await fetch('/donate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+                if (response.redirected) {
+                  window.location.href = response.url;
+                  return;
+                }
+                const result = await response.text();
+                showConfirmation(result, response.ok);
+                if (response.ok) {
+                    e.target.reset();
+                    // Reset payment details display
+                    showPaymentDetails('visa');
+                }
+            } catch (error) {
+                showConfirmation('Error submitting donation: ' + error.message, false);
+            }
+        });
+
+        // Confirmation message display
+        function showConfirmation(message, success) {
+          let confirmation = document.getElementById('donation-confirmation');
+          if (!confirmation) {
+            confirmation = document.createElement('div');
+            confirmation.id = 'donation-confirmation';
+            confirmation.className = 'confirmation-message';
+            document.querySelector('main').innerHTML = '';
+            document.querySelector('main').appendChild(confirmation);
+          }
+          confirmation.innerHTML = `<h2>${success ? 'Thank You!' : 'Error'}</h2><p>${message}</p><a href='/donate.html' class='btn'>Donate Again</a>`;
+        }
+
+        // Initialize payment details display
+        showPaymentDetails('visa');
+    </script>
+</body>
+</html>

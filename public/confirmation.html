@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation</title>
+  <link rel="stylesheet" href="styles2.css">
+</head>
+<body>
+  <main>
+    <div class="confirmation-message">
+      <h2 id="confirmation-title">Success!</h2>
+      <p id="confirmation-text">Your action was completed successfully.</p>
+      <a id="confirmation-btn" href="/" class="btn">Return Home</a>
+    </div>
+  </main>
+  <script>
+    // Optionally, allow dynamic content via query params
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('title')) {
+      document.getElementById('confirmation-title').textContent = params.get('title');
+    }
+    if (params.has('text')) {
+      document.getElementById('confirmation-text').textContent = params.get('text');
+    }
+    if (params.has('btn') && params.has('href')) {
+      const btn = document.getElementById('confirmation-btn');
+      btn.textContent = params.get('btn');
+      btn.href = params.get('href');
+    }
+  </script>
+</body>
+</html> 

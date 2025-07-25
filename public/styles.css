@@ -1,0 +1,234 @@
+/* Modern Professional Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+  margin: 0;
+  padding: 0;
+  color: #222;
+  padding-top: 70px;
+}
+
+header {
+  background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+  color: white;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  padding: 0 48px;
+}
+
+.main-nav ul {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.12rem;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+
+.main-nav ul li a:hover {
+  color: #c7d2fe;
+}
+
+.admin-login-link {
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  background: #3578c7;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+}
+.admin-login-link:hover {
+  background: #0056b3;
+  color: #fff !important;
+}
+
+.hero {
+  position: relative;
+  text-align: center;
+  color: #1e293b;
+  padding: 80px 10px 60px 10px;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(53, 120, 199, 0.08);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('images/bpnursinghome.jpg') no-repeat center center/cover;
+  filter: blur(2.5px) brightness(0.85);
+  z-index: -1;
+}
+
+.hero h1 {
+  font-size: 2.8em;
+  font-weight: 700;
+  background: rgba(255,255,255,0.85);
+  padding: 16px 32px;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 12px rgba(53,120,199,0.07);
+  color: #3578c7;
+  text-shadow: 0 2px 8px #cfd8e833;
+}
+
+.hero p {
+  font-size: 1.25em;
+  background: rgba(255,255,255,0.85);
+  padding: 10px 22px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  margin: 12px;
+  background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+  border: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn:hover {
+  background: #0056b3;
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+}
+
+/* About Section */
+#about {
+  text-align: center;
+  padding: 60px 20px 50px 20px;
+  background-color: #fff;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(53,120,199,0.06);
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 28px;
+  gap: 36px;
+}
+
+.map-container {
+  width: 45%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 16px rgba(53,120,199,0.10);
+  margin-right: 0;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.about-text {
+  width: 45%;
+  text-align: left;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #334155;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+  color: white;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+  margin-top: 40px;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 -2px 8px rgba(53,120,199,0.07);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .about-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .map-container, .about-text {
+    width: 100%;
+  }
+  .main-nav {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .main-nav ul {
+    gap: 12px;
+  }
+  .hero h1 {
+    font-size: 2em;
+    padding: 10px 10px;
+  }
+  .about-content {
+    padding: 0 8px;
+  }
+  #about {
+    padding: 30px 4px 20px 4px;
+  }
+  body {
+    padding-top: 80px;
+  }
+}

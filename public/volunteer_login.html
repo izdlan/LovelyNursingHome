@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Volunteer Login - Lovely Nursing Home</title>
+  <link rel="stylesheet" href="styles2.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    header {
+      text-align: center;
+      padding: 36px 0 12px 0;
+      background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+      border-bottom: 1px solid #e0e0e0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.2rem;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      text-shadow: 0 2px 8px #3578c733;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+      padding-top: 70px;
+    }
+    form {
+      background: #fff;
+      padding: 36px 32px 28px 32px;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+      min-width: 320px;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    label {
+      font-weight: 600;
+      color: #3578c7;
+      margin-bottom: 4px;
+      font-size: 1.08rem;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 12px 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 7px;
+      font-size: 1rem;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border: 1.5px solid #3578c7;
+      outline: none;
+      background: #fff;
+    }
+    button[type="submit"] {
+      background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+      color: #fff;
+      border: none;
+      padding: 13px 0;
+      border-radius: 7px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+    }
+    button[type="submit"]:hover {
+      background: #0056b3;
+      box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+    }
+    p {
+      text-align: center;
+      margin-top: 18px;
+      color: #475569;
+      font-size: 1.02rem;
+    }
+    a {
+      color: #3578c7;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    a:hover {
+      text-decoration: underline;
+      color: #004080;
+    }
+    @media (max-width: 600px) {
+      form {
+        padding: 18px 6px 14px 6px;
+        margin: 20px 4px 0 4px;
+      }
+      h1 {
+        font-size: 1.3rem;
+      }
+      main {
+        padding-top: 80px;
+      }
+    }
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 18px;
+      background: #e0e7ef;
+      color: #3578c7;
+      font-weight: 600;
+      padding: 8px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1.02rem;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+    }
+    .back-btn:hover {
+      background: #3578c7;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Volunteer Login</h1>
+  </header>
+
+  <main>
+    <a href="index.html" class="back-btn">← Back</a>
+    <form action="/volunteer/login" method="POST">
+      <label>Email:</label>
+      <input type="email" name="email" required />
+      <br/>
+      <label>Password:</label>
+      <input type="password" name="password" required />
+      <br/>
+      <button type="submit">Login</button>
+    </form>
+
+    <p>Don't have an account? <a href="volunteer_signup.html">Sign up here</a></p>
+  </main>
+  <footer>
+    <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>

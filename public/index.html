@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovely Nursing Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+      .bg-slideshow {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        animation: slideshow 24s infinite linear;
+        opacity: 0.18;
+        pointer-events: none;
+      }
+      @keyframes slideshow {
+        0%   { background-image: url('/images/photo1.jpg'); }
+        25%  { background-image: url('/images/photo2.jpg'); }
+        50%  { background-image: url('/images/photo3.jpg'); }
+        75%  { background-image: url('/images/photo4.jpg'); }
+        100% { background-image: url('/images/photo1.jpg'); }
+      }
+      header {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        height: 64px;
+        display: flex;
+        align-items: center;
+      }
+      .main-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 0 48px;
+      }
+      .main-nav ul {
+        display: flex;
+        gap: 36px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .main-nav ul li a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.12rem;
+        letter-spacing: 0.01em;
+        transition: color 0.2s;
+      }
+      .main-nav ul li a:hover {
+        color: #c7d2fe;
+      }
+      .admin-login-link {
+        color: #fff;
+        background: #3578c7;
+        padding: 8px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.3s, color 0.3s;
+        box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+        border: none;
+      }
+      .admin-login-link:hover {
+        background: #0056b3;
+        color: #fff;
+      }
+      .hero {
+        margin-top: 90px;
+        text-align: center;
+        padding: 60px 20px 40px 20px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(53, 120, 199, 0.08);
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero h1 {
+        color: #3578c7;
+        font-size: 3.5rem;
+        margin-bottom: 16px;
+        text-shadow: 0 2px 8px #cfd8e833;
+        background: none;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .tagline-bg {
+        display: inline-block;
+        background: rgba(255,255,255,0.7);
+        border-radius: 12px;
+        padding: 12px 24px;
+        margin-bottom: 24px;
+      }
+      .btn {
+        background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+        color: white;
+        padding: 14px 32px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 10px 8px;
+        transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+        box-shadow: 0 2px 8px rgba(53, 120, 199, 0.08);
+        display: inline-block;
+      }
+      .btn:hover {
+        background: #0056b3;
+        color: #fff;
+      }
+      section {
+        margin: 40px auto;
+        max-width: 1200px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(53, 120, 199, 0.08);
+        padding: 32px 20px;
+      }
+      h2 {
+        color: #3578c7;
+        text-align: center;
+        text-shadow: 0 2px 8px #cfd8e833;
+      }
+      footer {
+        background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+        color: #fff;
+        text-align: center;
+        padding: 24px 0;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 -2px 8px rgba(53, 120, 199, 0.07);
+        margin-top: 40px;
+        font-size: 1.08rem;
+        letter-spacing: 0.01em;
+      }
+      @media (max-width: 600px) {
+        .main-nav {
+          padding: 0 8px;
+        }
+        .main-nav ul {
+          gap: 12px;
+        }
+        .hero, section {
+          padding: 18px 6px 14px 6px;
+          margin: 20px 4px 0 4px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="bg-slideshow"></div>
+    <header>
+        <nav class="main-nav">
+            <ul>
+              <li><a href="index.html">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="volunteer_login.html">Volunteer</a></li>
+              <li><a href="donate.html">Donate</a></li>
+              <li><a href="feedback.html">Feedback</a></li>
+            </ul>
+            <a href="admin_login.html" class="admin-login-link">Admin Login</a>
+          </nav>
+    </header>
+    
+    <section id="home" class="hero">
+        <h1>Welcome to <br> Lovely Nursing Home</h1>
+        <div class="tagline-bg">Providing care and comfort to our elderly residents.</div>
+        <ul>
+        <a href="volunteer_login.html" class="btn">Become a Volunteer</a>
+        <a href="donate.html" class="btn">Make a Donation</a>
+        </ul>
+
+        
+    </section>
+    
+    <section id="about">
+        <h2>About Us</h2>
+        
+        <div class="about-content">
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d14815.39962108181!2d101.61103!3d3.10183!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zM8KwMDYnMDYuNiJOIDEwMcKwMzYnMzkuNyJF!5e1!3m2!1sen!2smy!4v1742456886733!5m2!1sen!2smy" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            
+            <div class="about-text">
+                <p>In July 1999 Lovely Nursing Centre which is located in Petaling Jaya, Selangor D.E, West Malaysia; Home for the Abandoned was initiated by Mr. Gopinath and his mother Madam Thanalechumi, together with a small group of aged on an existing bungalow.</p>
+                <p></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="volunteer-activities">
+        <h2 style="text-align: center;">Volunteer Activities</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Join our volunteer program and make a difference in the lives of our residents</p>
+        <div id="activities-list" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <!-- Activities will be loaded here -->
+        </div>
+    </section>
+
+    <section id="donors">
+        <h2 style="text-align: center;">Our Generous Donors</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">Thank you to all our donors who support our mission</p>
+        <div id="donors-list" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <!-- Monthly donor sections will be loaded here -->
+        </div>
+    </section>
+    
+    
+    
+    <footer>
+        <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div id="chatbot-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999;">
+      <button id="chatbot-toggle" style="background: #2563eb; color: #fff; border: none; border-radius: 50%; width: 56px; height: 56px; font-size: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.15); cursor: pointer;">💬</button>
+      <div id="chatbot-window" style="display: none; position: absolute; bottom: 70px; right: 0; width: 320px; max-width: 90vw; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); overflow: hidden;">
+        <div style="background: #2563eb; color: #fff; padding: 14px; font-weight: bold;">Lovely Nursing Home ChatBot <span id='chatbot-close' style='float:right; cursor:pointer;'>✖️</span></div>
+        <div id="chatbot-messages" style="padding: 14px; height: 260px; overflow-y: auto; font-size: 0.98rem; background: #f8fafc;"></div>
+        <form id="chatbot-form" style="display: flex; border-top: 1px solid #eee;">
+          <input id="chatbot-input" type="text" placeholder="Ask me anything..." autocomplete="off" style="flex:1; border:none; padding: 12px; font-size: 1rem; background: #f8fafc;">
+          <button type="submit" style="background: #2563eb; color: #fff; border: none; padding: 0 18px; font-size: 1.2rem; cursor: pointer;">➤</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+        // Load and display volunteer activities
+        async function loadActivities() {
+            try {
+                const response = await fetch('/admin/api/activities');
+                const activities = await response.json();
+                
+                console.log('Activities loaded:', activities); // Debug log
+                
+                const activitiesList = document.querySelector('#activities-list');
+                
+                if (activities.length === 0) {
+                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No activities available at the moment. Check back soon!</p>';
+                    return;
+                }
+
+                // Sort activities by date (upcoming first) and show at least 4
+                const sortedActivities = activities
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 4); // Show at least 4 activities
+
+                console.log('Sorted activities:', sortedActivities); // Debug log
+
+                if (sortedActivities.length === 0) {
+                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No activities available at the moment. Check back soon!</p>';
+                    return;
+                }
+
+                const activitiesHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                        ${sortedActivities.map(activity => {
+                            const activityDate = new Date(activity.date).toLocaleDateString('en-MY', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            
+                            const activityTime = activity.time ? new Date(`2000-01-01T${activity.time}`).toLocaleTimeString('en-MY', {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            }) : 'TBD';
+                            
+                            const imageUrl = activity.image ? activity.image : '/images/default-activity.jpg';
+                            console.log('Activity:', activity.title, 'Image URL:', imageUrl); // Debug log
+                            
+                            return `
+                                <div style="border-radius: 12px; overflow: hidden; transition: transform 0.3s ease;">
+                                    <div style="height: 160px; background: linear-gradient(45deg, #2563eb, #1e40af); display: flex; align-items: center; justify-content: center; position: relative;">
+                                        <img src="${imageUrl}" alt="${activity.title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'color: white; text-align: center; font-size: 2.5rem;\\'>🎯</div>'">
+                                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.75rem;">
+                                            ${activity.slots} slots
+                                        </div>
+                                    </div>
+                                    <div style="padding: 16px;">
+                                        <h3 style="color: #2563eb; margin: 0 0 12px 0; font-size: 1.1rem; line-height: 1.3;">${activity.title}</h3>
+                                        <div style="margin-bottom: 12px;">
+                                            <p style="margin: 4px 0; color: #666; font-size: 0.85rem;">
+                                                <strong>📅 Date:</strong> ${activityDate}
+                                            </p>
+                                            <p style="margin: 4px 0; color: #666; font-size: 0.85rem;">
+                                                <strong>⏰ Time:</strong> ${activityTime}
+                                            </p>
+                                        </div>
+                                        <p style="color: #333; line-height: 1.4; margin-bottom: 15px; font-size: 0.85rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${activity.description}</p>
+                                        <div style="text-align: center;">
+                                            <a href="volunteer_login.html" style="background: #2563eb; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; display: inline-block; transition: background-color 0.3s ease; font-size: 0.9rem;">
+                                                Sign Up to Join
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                
+                activitiesList.innerHTML = activitiesHTML;
+                
+            } catch (error) {
+                console.error('Error loading activities:', error);
+                document.querySelector('#activities-list').innerHTML = '<p style="text-align: center; color: #666;">Unable to load activities at the moment.</p>';
+            }
+        }
+
+        // Load and display donors grouped by month
+        async function loadDonors() {
+            try {
+                const [donationsResponse, targetResponse] = await Promise.all([
+                    fetch('/donate'),
+                    fetch('/admin/api/donation-target')
+                ]);
+                
+                const donations = await donationsResponse.json();
+                const targetData = await targetResponse.json();
+                const targetAmount = targetData.target;
+                
+                if (donations.length === 0) {
+                    document.querySelector('#donors-list').innerHTML = '<p style="text-align: center; color: #666;">No donations yet. Be the first to make a difference!</p>';
+                    return;
+                }
+
+                // Group donations by month and year
+                const monthlyDonations = {};
+                
+                donations.forEach(donation => {
+                    const date = new Date(donation.donation_date);
+                    const monthYear = date.toLocaleDateString('en-MY', {
+                        year: 'numeric',
+                        month: 'long'
+                    });
+                    
+                    if (!monthlyDonations[monthYear]) {
+                        monthlyDonations[monthYear] = [];
+                    }
+                    monthlyDonations[monthYear].push(donation);
+                });
+
+                // Sort months (most recent first)
+                const sortedMonths = Object.keys(monthlyDonations).sort((a, b) => {
+                    const dateA = new Date(a);
+                    const dateB = new Date(b);
+                    return dateB - dateA;
+                });
+
+                let donorsHTML = '';
+                
+                sortedMonths.forEach(month => {
+                    const monthDonations = monthlyDonations[month];
+                    
+                    // Sort donations within each month by amount (highest to lowest)
+                    monthDonations.sort((a, b) => parseFloat(b.donation_amount) - parseFloat(a.donation_amount));
+                    
+                    // Calculate total for the month
+                    const monthlyTotal = monthDonations.reduce((sum, donation) => sum + parseFloat(donation.donation_amount), 0);
+                    
+                    // Check if this is the current month
+                    const currentMonth = new Date().toLocaleDateString('en-MY', {
+                        year: 'numeric',
+                        month: 'long'
+                    });
+                    const isCurrentMonth = month === currentMonth;
+                    
+                    // Calculate progress percentage if target exists
+                    let progressHTML = '';
+                    if (targetAmount && isCurrentMonth) {
+                        const progressPercentage = Math.min((monthlyTotal / targetAmount) * 100, 100);
+                        const progressColor = progressPercentage >= 100 ? '#28a745' : progressPercentage >= 75 ? '#ffc107' : '#dc3545';
+                        
+                        progressHTML = `
+                            <div style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: bold; color: #333;">Target: RM ${targetAmount.toLocaleString()}</span>
+                                    <span style="font-weight: bold; color: ${progressColor};">${progressPercentage.toFixed(1)}%</span>
+                                </div>
+                                <div style="background: #e9ecef; border-radius: 10px; height: 20px; overflow: hidden;">
+                                    <div style="background: ${progressColor}; height: 100%; width: ${progressPercentage}%; transition: width 0.3s ease;"></div>
+                                </div>
+                                <div style="text-align: center; margin-top: 5px; font-size: 0.9rem; color: #666;">
+                                    RM ${monthlyTotal.toLocaleString()} of RM ${targetAmount.toLocaleString()}
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    donorsHTML += `
+                        <div style="margin-bottom: 40px;">
+                            <h3 style="text-align: center; color: #2563eb; margin-bottom: 10px; font-size: 1.5rem;">${month}</h3>
+                            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 1.1rem;">
+                                Total: RM ${monthlyTotal.toLocaleString()} | ${monthDonations.length} donor${monthDonations.length > 1 ? 's' : ''}
+                            </p>
+                            ${progressHTML}
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                                ${monthDonations.map(donation => {
+                                    const donorName = donation.surname === 'Anonymous' ? 
+                                        'Anonymous Donor' : 
+                                        `${donation.title || ''} ${donation.surname} ${donation.given_name || ''}`.trim();
+                                    
+                                    const donationDate = new Date(donation.donation_date).toLocaleDateString('en-MY', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: 'numeric'
+                                    });
+                                    
+                                    return `
+                                        <div style="padding: 20px; border-radius: 10px; text-align: center;">
+                                            <h4 style="color: #2563eb; margin: 0 0 10px 0; font-size: 1.1rem;">${donorName}</h4>
+                                            <p style="color: #28a745; font-weight: bold; font-size: 1.2rem; margin: 5px 0;">RM ${parseFloat(donation.donation_amount).toLocaleString()}</p>
+                                            <p style="color: #666; font-size: 0.9rem; margin: 5px 0;">${donation.donation_type === 'monthly' ? 'Monthly Donor' : 'One-time Donation'}</p>
+                                            <p style="color: #999; font-size: 0.8rem; margin: 5px 0;">${donationDate}</p>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.querySelector('#donors-list').innerHTML = donorsHTML;
+                
+            } catch (error) {
+                console.error('Error loading donors:', error);
+                document.querySelector('#donors-list').innerHTML = '<p style="text-align: center; color: #666;">Unable to load donors at the moment.</p>';
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            loadActivities();
+            loadDonors();
+        });
+
+        // Toggle chatbot window
+        document.getElementById('chatbot-toggle').onclick = function() {
+            document.getElementById('chatbot-window').style.display = 'block';
+        };
+        document.getElementById('chatbot-close').onclick = function() {
+            document.getElementById('chatbot-window').style.display = 'none';
+        };
+
+        // Simple FAQ-based chatbot logic
+        const faqAnswers = [
+            { q: /donate/i, a: "You can donate by clicking the 'Make a Donation' button and filling out the form. We accept Visa/MasterCard, FPX, and QRPay." },
+            { q: /volunteer/i, a: "To become a volunteer, click 'Become a Volunteer' and sign up. After admin approval, you can book activities." },
+            { q: /activity|event|majlis/i, a: "All upcoming volunteer activities are listed on this page. Click 'Sign Up to Join' to participate (login required)." },
+            { q: /location|where/i, a: "We are located in Petaling Jaya, Selangor. See the map in the About section for details." },
+            { q: /contact|phone|email/i, a: "You can contact us via WhatsApp at +6013-6281083 or use the feedback form on this site." },
+            { q: /feedback/i, a: "You can submit feedback using the 'Feedback' page. Admin will review and respond to your message." },
+            { q: /target|goal/i, a: "Our monthly donation target is shown in the Donors section. Thank you for your support!" },
+            { q: /admin/i, a: "Admin login is for staff only. Volunteers and donors do not need admin access." },
+            { q: /.*/, a: "Sorry, I don't have an answer for that. Please contact us directly or check the FAQ above!" }
+        ];
+
+        document.getElementById('chatbot-form').onsubmit = function(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+            addChatMessage('You', msg);
+            let answered = false;
+            for (const faq of faqAnswers) {
+                if (faq.q.test(msg)) {
+                    setTimeout(() => addChatMessage('Bot', faq.a), 400);
+                    answered = true;
+                    break;
+                }
+            }
+            if (!answered) setTimeout(() => addChatMessage('Bot', faqAnswers[faqAnswers.length-1].a), 400);
+            input.value = '';
+        };
+
+        function addChatMessage(sender, text) {
+            const messages = document.getElementById('chatbot-messages');
+            messages.innerHTML += `<div style="margin-bottom:8px;"><strong style="color:${sender==='Bot'?'#2563eb':'#222'}">${sender}:</strong> <span>${text}</span></div>`;
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+</body>
+</html>

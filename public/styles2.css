@@ -1,0 +1,202 @@
+/* Modern Professional Form & Donation Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+    color: #222;
+}
+
+/* Navigation Bar */
+nav {
+    background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+    padding: 18px 0;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(53,120,199,0.08);
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 18px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.13rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: color 0.2s;
+}
+
+nav ul li a:hover {
+    color: #c7d2fe;
+    text-decoration: underline;
+}
+
+.donation-form {
+    width: 100%;
+    max-width: 480px;
+    margin: 40px auto 0 auto;
+    background: #fff;
+    padding: 36px 32px 28px 32px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+}
+
+h2 {
+    text-align: center;
+    color: #3578c7;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+p {
+    text-align: center;
+    color: #475569;
+    margin-bottom: 18px;
+}
+
+fieldset {
+    border: none;
+    margin: 14px 0;
+    padding: 0 0 8px 0;
+}
+
+legend {
+    font-weight: 600;
+    color: #3578c7;
+    font-size: 1.08rem;
+    margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 10px;
+    margin: 7px 0 14px 0;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border 0.2s;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus {
+    border: 1.5px solid #3578c7;
+    outline: none;
+    background: #fff;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+    margin-right: 7px;
+    accent-color: #3578c7;
+}
+
+button,
+button[type="submit"] {
+    width: 100%;
+    padding: 13px 0;
+    background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+}
+
+button:hover,
+button[type="submit"]:hover {
+    background: #0056b3;
+    box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+    color: white;
+    font-size: 1.08rem;
+    letter-spacing: 0.01em;
+    margin-top: 40px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 -2px 8px rgba(53,120,199,0.07);
+}
+
+/* Confirmation message box */
+.confirmation-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+    padding: 40px 32px;
+    max-width: 420px;
+    margin: 60px auto;
+    text-align: center;
+}
+.confirmation-message h2 {
+    color: #3578c7;
+    font-size: 2rem;
+    margin-bottom: 18px;
+}
+.confirmation-message p {
+    color: #475569;
+    font-size: 1.15rem;
+    margin-bottom: 24px;
+}
+.confirmation-message .btn {
+    background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+    color: #fff;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 7px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(53,120,199,0.07);
+    text-decoration: none;
+    display: inline-block;
+}
+.confirmation-message .btn:hover {
+    background: #0056b3;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .donation-form {
+        padding: 18px 6px 14px 6px;
+        margin: 20px 4px 0 4px;
+    }
+    h2 {
+        font-size: 1.3rem;
+    }
+}
