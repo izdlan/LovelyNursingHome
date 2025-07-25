@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
-// MongoDB connection string
+// MongoDB connection string - use environment variable in production
 const MONGO_URI = process.env.MONGODB_URI || 'mongodb+srv://whaiqal7:Wanzack123@lovelynursinghome.sbhoe2w.mongodb.net/lovely_nursing_home?retryWrites=true&w=majority&appName=LovelyNursingHome';
 
 // Connect to MongoDB Atlas
@@ -17,14 +17,21 @@ mongoose.connect(MONGO_URI)
   })
   .catch((err) => {
     console.error("❌ MongoDB connection error:", err.message);
+    // Don't crash the app on connection error
   });
+
+// Add connection error handler
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
 
 // Import the Express app from backend/server.js
 const app = require('./backend/server');
 
 // Add additional debugging routes
 app.get('/test-connection', (req, res) => {
-  res.send('Server connection test successful!');
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.send(`Server connection test successful! Database: ${dbStatus}`);
 });
 
 // Add a catch-all route for HTML files
