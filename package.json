@@ -1,11 +1,11 @@
 {
   "name": "lovelynursinghome",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node index.js",
+    "dev": "node index.js",
     "build": "echo 'No build step required'"
   },
   "keywords": ["nursing-home", "volunteer-management", "donation-system"],
