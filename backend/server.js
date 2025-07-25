@@ -37,7 +37,7 @@ mongoose.connect(MONGO_URI, {
 // ✅ Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secretkey',
@@ -123,7 +123,7 @@ app.post('/admin/volunteers/:id/status', async (req, res) => {
 });
 
 app.get('/admin/add_activity.html', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin', 'add_activity.html'));
+  res.sendFile(path.join(__dirname, '../frontend/public/admin/add_activity.html'));
 });
 
 app.use('/admin', adminRoutes);
