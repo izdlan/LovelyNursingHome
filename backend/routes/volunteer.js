@@ -3,8 +3,33 @@ const router = express.Router();
 const volunteerController = require('../controllers/volunteerController');
 const activityController = require('../controllers/activityController');
 const Booking = require('../models/Booking');
+const Volunteer = require('../models/Volunteer');
 
 router.get('/api/activities', activityController.getVolunteerActivities);
+
+// New endpoint to get current volunteer info
+router.get('/api/me', async (req, res) => {
+  try {
+    // Check if volunteer is in session
+    if (req.session.volunteer && req.session.volunteer._id) {
+      // Find the volunteer in the database to get fresh data
+      const volunteer = await Volunteer.findById(req.session.volunteer._id);
+      if (volunteer) {
+        // Return only necessary info, not password
+        return res.json({
+          _id: volunteer._id,
+          fullName: volunteer.fullName,
+          email: volunteer.email,
+          status: volunteer.status
+        });
+      }
+    }
+    res.status(401).json({ error: 'Not logged in or session expired' });
+  } catch (error) {
+    console.error('Error fetching volunteer info:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 router.post('/signup', volunteerController.signup);
 router.post('/book-activity', activityController.bookActivity);

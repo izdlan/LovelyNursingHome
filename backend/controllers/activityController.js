@@ -93,12 +93,43 @@ exports.getVolunteerActivities = async (req, res) => {
 
 exports.bookActivity = async (req, res) => {
   try {
-    const volunteerId = req.session.volunteer && req.session.volunteer._id;
-    if (!volunteerId) return res.status(401).send('Not logged in');
+    // Add debug logging
+    console.log('Session data:', JSON.stringify(req.session));
+    console.log('Volunteer in session:', req.session.volunteer);
+    
+    // Get volunteerId from session OR from request body
+    let volunteerId = req.session.volunteer && req.session.volunteer._id;
+    
+    // If not in session, try to get from request body (client-side fallback)
+    if (!volunteerId && req.body.volunteerId) {
+      volunteerId = req.body.volunteerId;
+      console.log('Using volunteerId from request body:', volunteerId);
+    }
+    
+    console.log('Final volunteerId used:', volunteerId);
+    
+    if (!volunteerId) {
+      console.log('No volunteer ID found in session or request body');
+      return res.status(401).send('Not logged in');
+    }
+    
     const { activityId } = req.body;
+    console.log('Booking activity:', activityId, 'for volunteer:', volunteerId);
+    
+    // Verify volunteer exists before booking
+    const Volunteer = require('../models/Volunteer');
+    const volunteerExists = await Volunteer.findById(volunteerId);
+    if (!volunteerExists) {
+      console.log('Volunteer not found with ID:', volunteerId);
+      return res.status(404).send('Volunteer not found');
+    }
+    
     const booking = await activityDao.bookActivity(activityId, volunteerId);
+    console.log('Booking created:', booking);
+    
     res.json({ success: true, booking });
   } catch (err) {
+    console.error('Booking error:', err);
     res.status(400).send('Booking failed: ' + err.message);
   }
 };

@@ -161,6 +161,22 @@
   </main>
 
   <script>
+    // Add a function to store volunteer ID
+    let currentVolunteerId = null;
+
+    // Fetch volunteer information
+    fetch('/volunteer/api/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data && data._id) {
+          currentVolunteerId = data._id;
+          console.log('Volunteer ID loaded:', currentVolunteerId);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching volunteer info:', err);
+      });
+
     // Fetch and display available activities
     fetch('/volunteer/api/activities')
       .then(res => res.json())
@@ -233,20 +249,34 @@
     }
 
     function proceedBookActivity(activityId) {
+      // Include volunteerId in the request
       fetch('/volunteer/book-activity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ activityId })
+        body: JSON.stringify({ 
+          activityId,
+          volunteerId: currentVolunteerId // Include volunteer ID in request
+        })
       })
-        .then(res => res.text())
+        .then(res => {
+          if (!res.ok) {
+            return res.text().then(text => {
+              throw new Error(text || 'Booking failed');
+            });
+          }
+          return res.text();
+        })
         .then(msg => {
           showDashboardConfirmation('Booking submitted!');
           setTimeout(() => location.reload(), 1800);
+        })
+        .catch(err => {
+          showDashboardConfirmation('Error: ' + err.message, true);
         });
     }
 
-    // Show a styled confirmation message at the top of the page
-    function showDashboardConfirmation(message) {
+    // Update showDashboardConfirmation to handle errors
+    function showDashboardConfirmation(message, isError = false) {
       let msgDiv = document.getElementById('dashboard-confirmation');
       if (!msgDiv) {
         msgDiv = document.createElement('div');
@@ -255,8 +285,6 @@
         msgDiv.style.top = '80px';
         msgDiv.style.left = '50%';
         msgDiv.style.transform = 'translateX(-50%)';
-        msgDiv.style.background = 'linear-gradient(90deg, #3578c7 0%, #004080 100%)';
-        msgDiv.style.color = '#fff';
         msgDiv.style.padding = '16px 32px';
         msgDiv.style.borderRadius = '8px';
         msgDiv.style.fontWeight = '600';
@@ -265,11 +293,20 @@
         msgDiv.style.zIndex = '2000';
         document.body.appendChild(msgDiv);
       }
+      
+      if (isError) {
+        msgDiv.style.background = 'linear-gradient(90deg, #e53935 0%, #c62828 100%)';
+      } else {
+        msgDiv.style.background = 'linear-gradient(90deg, #3578c7 0%, #004080 100%)';
+      }
+      
+      msgDiv.style.color = '#fff';
       msgDiv.textContent = message;
       msgDiv.style.display = 'block';
+      
       setTimeout(() => {
         msgDiv.style.display = 'none';
-      }, 1500);
+      }, isError ? 3000 : 1500);
     }
 
     // Load volunteer's booked activities
