@@ -165,7 +165,9 @@
     let currentVolunteerId = null;
 
     // Fetch volunteer information
-    fetch('/volunteer/api/me')
+    fetch('/volunteer/api/me', {
+      credentials: 'include'
+    })
       .then(res => res.json())
       .then(data => {
         if (data && data._id) {
@@ -178,7 +180,9 @@
       });
 
     // Fetch and display available activities
-    fetch('/volunteer/api/activities')
+    fetch('/volunteer/api/activities', {
+      credentials: 'include'
+    })
       .then(res => res.json())
       .then(data => {
         const list = document.getElementById('activities-list');
@@ -253,6 +257,7 @@
       fetch('/volunteer/book-activity', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ 
           activityId,
           volunteerId: currentVolunteerId // Include volunteer ID in request
@@ -310,7 +315,9 @@
     }
 
     // Load volunteer's booked activities
-    fetch('/volunteer/my-bookings')
+    fetch('/volunteer/my-bookings', {
+      credentials: 'include'
+    })
       .then(res => res.json())
       .then(data => {
         const calendar = document.getElementById('calendar');

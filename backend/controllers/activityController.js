@@ -170,6 +170,9 @@ exports.updateBookingStatus = async (req, res) => {
 
 exports.getMyBookings = async (req, res) => {
   try {
+    console.log('getMyBookings - Session data:', JSON.stringify(req.session));
+    console.log('getMyBookings - Volunteer in session:', req.session.volunteer);
+    
     const volunteerId = req.session.volunteer && req.session.volunteer._id;
     if (!volunteerId) return res.status(401).send('Not logged in');
     const bookings = await activityDao.getBookingsForVolunteer(volunteerId);

@@ -309,7 +309,9 @@
       const year = currentDate.getFullYear();
       
       try {
-        const response = await fetch(`/volunteer/calendar?month=${month}&year=${year}`);
+        const response = await fetch(`/volunteer/calendar?month=${month}&year=${year}`, {
+      credentials: 'include'
+    });
         if (response.ok) {
           bookings = await response.json();
           renderCalendar();

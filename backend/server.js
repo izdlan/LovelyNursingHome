@@ -39,7 +39,8 @@ app.use(session({
     ttl: 14 * 24 * 60 * 60 // 14 days session expiration
   }),
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Set to false to allow HTTP cookies for development and mixed environments
+    httpOnly: true,
     maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
   }
 }));

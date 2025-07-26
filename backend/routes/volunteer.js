@@ -8,8 +8,25 @@ const Volunteer = require('../models/Volunteer');
 router.get('/api/activities', activityController.getVolunteerActivities);
 
 // New endpoint to get current volunteer info
+// Debug endpoint to check session
+router.get('/api/session-debug', (req, res) => {
+  console.log('Session debug - Full session:', JSON.stringify(req.session));
+  console.log('Session debug - Volunteer:', req.session.volunteer);
+  console.log('Session debug - Session ID:', req.sessionID);
+  
+  res.json({
+    sessionExists: !!req.session,
+    sessionID: req.sessionID,
+    volunteerInSession: !!req.session.volunteer,
+    volunteerData: req.session.volunteer || null
+  });
+});
+
 router.get('/api/me', async (req, res) => {
   try {
+    console.log('Session data:', JSON.stringify(req.session));
+    console.log('Volunteer in session:', req.session.volunteer);
+    
     // Check if volunteer is in session
     if (req.session.volunteer && req.session.volunteer._id) {
       // Find the volunteer in the database to get fresh data
