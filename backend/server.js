@@ -136,7 +136,19 @@ app.get('/admin/add_activity.html', (req, res) => {
 app.use('/admin', adminRoutes);
 app.use('/volunteer', volunteerRoutes);
 app.use('/donate', donateRoutes);
+// Test endpoint for feedback
+app.get('/test-feedback', async (req, res) => {
+  try {
+    const Feedback = require('./models/Feedback');
+    const count = await Feedback.countDocuments();
+    res.json({ message: 'Feedback test endpoint working', count });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.use('/feedback', feedbackRoute);
+app.use('/api/feedback', feedbackRoute);
 app.use('/donor', donorRoutes);
 
 // Export the app to be used in index.js

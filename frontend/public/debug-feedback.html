@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Feedback API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        button { padding: 10px 15px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Debug Feedback API</h1>
+    
+    <div class="test-section">
+        <h3>1. Test Database Connection</h3>
+        <button onclick="testConnection()">Test Connection</button>
+        <div id="connection-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. Test Feedback Count</h3>
+        <button onclick="testFeedbackCount()">Get Feedback Count</button>
+        <div id="count-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. Test Get All Feedbacks</h3>
+        <button onclick="testGetAllFeedbacks()">Get All Feedbacks</button>
+        <div id="feedbacks-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>4. Test Submit Feedback</h3>
+        <button onclick="testSubmitFeedback()">Submit Test Feedback</button>
+        <div id="submit-result"></div>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('connection-result');
+            resultDiv.innerHTML = '<span class="info">Testing...</span>';
+            
+            try {
+                const response = await fetch('/test-connection');
+                const text = await response.text();
+                resultDiv.innerHTML = `<span class="success">✅ Success: ${text}</span>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testFeedbackCount() {
+            const resultDiv = document.getElementById('count-result');
+            resultDiv.innerHTML = '<span class="info">Testing...</span>';
+            
+            try {
+                const response = await fetch('/test-feedback');
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success: ${data.message}, Count: ${data.count}</span>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testGetAllFeedbacks() {
+            const resultDiv = document.getElementById('feedbacks-result');
+            resultDiv.innerHTML = '<span class="info">Testing...</span>';
+            
+            try {
+                const response = await fetch('/feedback/all');
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <span class="success">✅ Success: Found ${data.length} feedbacks</span>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            }
+        }
+
+        async function testSubmitFeedback() {
+            const resultDiv = document.getElementById('submit-result');
+            resultDiv.innerHTML = '<span class="info">Testing...</span>';
+            
+            try {
+                const response = await fetch('/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: 'Test User',
+                        email: 'test@example.com',
+                        message: 'This is a test feedback from debug page'
+                    })
+                });
+                const data = await response.json();
+                resultDiv.innerHTML = `<span class="success">✅ Success: ${data.message}</span>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html> 

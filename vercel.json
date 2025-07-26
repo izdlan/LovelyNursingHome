@@ -29,7 +29,15 @@
       "dest": "index.js"
     },
     {
-      "src": "/feedback",
+      "src": "/feedback/(.*)",
+      "dest": "index.js"
+    },
+    {
+      "src": "/api/feedback/(.*)",
+      "dest": "index.js"
+    },
+    {
+      "src": "/test-feedback",
       "dest": "index.js"
     },
     {

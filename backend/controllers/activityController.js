@@ -173,6 +173,17 @@ exports.updateBookingStatus = async (req, res) => {
   }
 };
 
+exports.deleteBooking = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const result = await activityDao.deleteBooking(bookingId);
+    res.json(result);
+  } catch (err) {
+    console.error('Error deleting booking:', err);
+    res.status(500).send('Error deleting booking: ' + err.message);
+  }
+};
+
 exports.getMyBookings = async (req, res) => {
   try {
     console.log('getMyBookings - Session data:', JSON.stringify(req.session));

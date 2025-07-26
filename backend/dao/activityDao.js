@@ -49,6 +49,20 @@ exports.updateBookingStatus = async (bookingId, status) => {
   return await Booking.findById(bookingId).populate('volunteer');
 };
 
+exports.deleteBooking = async (bookingId) => {
+  const booking = await Booking.findById(bookingId);
+  if (!booking) throw new Error('Booking not found');
+  
+  // If the booking was approved, restore the slot
+  if (booking.status === 'approved') {
+    await Activity.findByIdAndUpdate(booking.activity, { $inc: { slots: 1 } });
+  }
+  
+  // Delete the booking
+  await Booking.findByIdAndDelete(bookingId);
+  return { success: true, message: 'Booking deleted successfully' };
+};
+
 exports.getBookingsForVolunteer = async (volunteerId) => {
   return await Booking.find({ volunteer: volunteerId }).populate('activity').sort({ bookedAt: -1 });
 };

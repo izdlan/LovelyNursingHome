@@ -45,6 +45,9 @@ router.get('/api/activities/:activityId/bookings', requireAdminAuth, activityCon
 // ✅ POST route to update booking status
 router.post('/api/bookings/:bookingId/status', requireAdminAuth, activityController.updateBookingStatus);
 
+// ✅ DELETE route to delete a booking
+router.delete('/api/bookings/:bookingId', requireAdminAuth, activityController.deleteBooking);
+
 // GET route for a single activity
 router.get('/api/activities/:id', requireAdminAuth, activityController.getActivityById);
 
@@ -104,6 +107,17 @@ router.get('/volunteers/approved', requireAdminAuth, async (req, res) => {
     res.json(approved);
   } catch (err) {
     res.status(500).send('❌ Failed to fetch approved volunteers');
+  }
+});
+
+// ✅ GET route to retrieve all feedbacks
+router.get('/api/feedbacks', requireAdminAuth, async (req, res) => {
+  try {
+    const Feedback = require('../models/Feedback');
+    const feedbacks = await Feedback.find().sort({ createdAt: -1 });
+    res.json(feedbacks);
+  } catch (err) {
+    res.status(500).send('❌ Failed to fetch feedbacks');
   }
 });
 

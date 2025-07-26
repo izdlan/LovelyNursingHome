@@ -13,9 +13,12 @@ exports.submitFeedback = async (req, res) => {
 
 exports.getAllFeedback = async (req, res) => {
     try {
+        console.log('Getting all feedbacks...');
         const feedbacks = await Feedback.find().sort({ createdAt: -1 });
+        console.log('Found feedbacks:', feedbacks.length);
         res.json(feedbacks);
     } catch (error) {
+        console.error('Error fetching feedbacks:', error);
         res.status(500).json({ message: 'Error fetching feedbacks', error });
     }
 };

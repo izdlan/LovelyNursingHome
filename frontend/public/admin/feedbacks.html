@@ -190,9 +190,48 @@
   <script>
     let feedbacks = [];
     async function fetchFeedbacks() {
-      const res = await fetch('/feedback/all');
-      feedbacks = await res.json();
-      renderFeedbacks();
+      try {
+        // Try multiple possible endpoints
+        let res;
+        let success = false;
+        
+        // Try /feedback/all first
+        try {
+          res = await fetch('/feedback/all');
+          if (res.ok) {
+            success = true;
+          }
+        } catch (e) {
+          console.log('First endpoint failed, trying /api/feedback/all');
+        }
+        
+        // If first failed, try /api/feedback/all
+        if (!success) {
+          try {
+            res = await fetch('/api/feedback/all');
+            if (res.ok) {
+              success = true;
+            }
+          } catch (e) {
+            console.log('Second endpoint failed, trying direct database query');
+          }
+        }
+        
+        // If both failed, try a direct database query endpoint
+        if (!success) {
+          res = await fetch('/admin/api/feedbacks');
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+        }
+        
+        feedbacks = await res.json();
+        console.log('Fetched feedbacks:', feedbacks);
+        renderFeedbacks();
+      } catch (error) {
+        console.error('Error fetching feedbacks:', error);
+        document.getElementById('feedbacks-list').innerHTML = '<p style="color: red;">Error loading feedbacks: ' + error.message + '</p>';
+      }
     }
     function renderFeedbacks() {
       const list = document.getElementById('feedbacks-list');
@@ -253,11 +292,13 @@
           await fetchFeedbacks();
           setTimeout(closeModal, 1000);
         } else {
-          statusDiv.textContent = 'Error sending reply.';
+          const errorData = await response.text();
+          console.error('Reply failed:', response.status, errorData);
+          statusDiv.textContent = 'Error sending reply: ' + response.status;
         }
       } catch (e) {
         console.error('Reply send failed:', e.message);
-        statusDiv.textContent = 'Error sending reply.';
+        statusDiv.textContent = 'Error sending reply: ' + e.message;
       }
     };
     window.closeModal = closeModal;
