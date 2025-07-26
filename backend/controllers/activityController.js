@@ -137,9 +137,14 @@ exports.bookActivity = async (req, res) => {
 exports.getBookingsForActivity = async (req, res) => {
   try {
     const { activityId } = req.params;
+    console.log('Admin requesting bookings for activity:', activityId);
+    
     const bookings = await activityDao.getBookingsForActivity(activityId);
+    console.log('Returning bookings to admin:', bookings.length, 'bookings');
+    
     res.json(bookings);
   } catch (err) {
+    console.error('Error in getBookingsForActivity controller:', err);
     res.status(500).send('Error fetching bookings');
   }
 };

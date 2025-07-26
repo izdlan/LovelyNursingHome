@@ -54,5 +54,26 @@ exports.getBookingsForVolunteer = async (volunteerId) => {
 };
 
 exports.getBookingsForActivity = async (activityId) => {
-  return await Booking.find({ activity: activityId }).populate('volunteer').sort({ bookedAt: -1 });
+  try {
+    const bookings = await Booking.find({ activity: activityId })
+      .populate('volunteer', 'fullName email status')
+      .sort({ bookedAt: -1 });
+    
+    // Add debugging
+    console.log('Bookings for activity:', activityId, 'Count:', bookings.length);
+    bookings.forEach((booking, index) => {
+      console.log(`Booking ${index + 1}:`, {
+        id: booking._id,
+        volunteerId: booking.volunteer,
+        volunteerData: booking.volunteer,
+        status: booking.status,
+        bookedAt: booking.bookedAt
+      });
+    });
+    
+    return bookings;
+  } catch (error) {
+    console.error('Error in getBookingsForActivity:', error);
+    throw error;
+  }
 };

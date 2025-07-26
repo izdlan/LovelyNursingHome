@@ -196,7 +196,9 @@
 
   <script>
     async function fetchActivitiesAndBookings() {
-      const res = await fetch('/admin/api/activities');
+      const res = await fetch('/admin/api/activities', {
+        credentials: 'include'
+      });
       const activities = await res.json();
       const list = document.getElementById('activities-list');
       list.innerHTML = '';
@@ -222,7 +224,9 @@
         `;
         list.appendChild(card);
         // Fetch bookings for this activity
-        const bookingsRes = await fetch(`/admin/api/activities/${activity._id}/bookings`);
+        const bookingsRes = await fetch(`/admin/api/activities/${activity._id}/bookings`, {
+          credentials: 'include'
+        });
         const bookings = await bookingsRes.json();
         const bookingsDiv = card.querySelector('.bookings');
         if (bookings.length === 0) {
@@ -232,7 +236,19 @@
           table.innerHTML = `
             <thead><tr><th>Volunteer Name</th><th>Email</th><th>Booked At</th><th>Status</th><th>Action</th></tr></thead>
             <tbody>
-              ${bookings.map(b => `<tr><td>${b.volunteer?.fullName || '-'}<\/td><td>${b.volunteer?.email || '-'}<\/td><td>${new Date(b.bookedAt).toLocaleString()}<\/td><td>${b.status}<\/td><td>${b.status === 'pending' ? `<button class='approve' onclick=\"updateBookingStatus('${b._id}','approved')\">Approve<\/button> <button class='reject' onclick=\"updateBookingStatus('${b._id}','rejected')\">Reject<\/button>` : ''}<\/td><\/tr>`).join('')}
+              ${bookings.map(b => {
+                const volunteerName = b.volunteer && b.volunteer.fullName ? b.volunteer.fullName : 'Unknown Volunteer';
+                const volunteerEmail = b.volunteer && b.volunteer.email ? b.volunteer.email : 'No email';
+                const volunteerStatus = b.volunteer && b.volunteer.status ? b.volunteer.status : 'Unknown';
+                
+                return `<tr>
+                  <td>${volunteerName}</td>
+                  <td>${volunteerEmail}</td>
+                  <td>${new Date(b.bookedAt).toLocaleString()}</td>
+                  <td>${b.status}</td>
+                  <td>${b.status === 'pending' ? `<button class='approve' onclick="updateBookingStatus('${b._id}','approved')">Approve</button> <button class='reject' onclick="updateBookingStatus('${b._id}','rejected')">Reject</button>` : ''}</td>
+                </tr>`;
+              }).join('')}
             </tbody>
           `;
           bookingsDiv.innerHTML = '<h4>Recent Bookings</h4>';
@@ -296,6 +312,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
+          credentials: 'include',
           body: JSON.stringify({ status })
       }).then(response => {
         if (response.ok) {
@@ -360,6 +377,7 @@
       fetch(`/admin/api/bookings/${bookingId}/status`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ status })
       }).then(() => {
         showDashboardConfirmation(`Booking ${status}`);

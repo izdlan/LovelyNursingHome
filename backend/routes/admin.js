@@ -10,6 +10,19 @@ const Volunteer = require('../models/Volunteer');
 const Admin = require('../models/Admin');
 const Booking = require('../models/Booking');
 
+// Admin authentication middleware
+const requireAdminAuth = (req, res, next) => {
+  console.log('Admin auth check - Session:', JSON.stringify(req.session));
+  console.log('Admin auth check - Admin in session:', req.session.admin);
+  
+  if (!req.session.admin) {
+    console.log('Admin not authenticated, redirecting to login');
+    return res.status(401).json({ error: 'Admin authentication required' });
+  }
+  console.log('Admin authenticated:', req.session.admin.username);
+  next();
+};
+
 // ✅ Setup for file upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'public/uploads'),
@@ -21,31 +34,31 @@ const upload = multer({ storage });
 router.post('/add-activity', upload.single('image'), activityController.addActivity);
 
 // ✅ GET route to retrieve all activities
-router.get('/api/activities', activityController.getAdminActivities);
+router.get('/api/activities', requireAdminAuth, activityController.getAdminActivities);
 
 // ✅ GET route to retrieve all donations
-router.get('/api/donations', donationController.getAllDonations);
+router.get('/api/donations', requireAdminAuth, donationController.getAllDonations);
 
 // ✅ GET route to retrieve bookings for an activity
-router.get('/api/activities/:activityId/bookings', activityController.getBookingsForActivity);
+router.get('/api/activities/:activityId/bookings', requireAdminAuth, activityController.getBookingsForActivity);
 
 // ✅ POST route to update booking status
-router.post('/api/bookings/:bookingId/status', activityController.updateBookingStatus);
+router.post('/api/bookings/:bookingId/status', requireAdminAuth, activityController.updateBookingStatus);
 
 // GET route for a single activity
-router.get('/api/activities/:id', activityController.getActivityById);
+router.get('/api/activities/:id', requireAdminAuth, activityController.getActivityById);
 
 // PUT route to update an activity
-router.put('/api/activities/:id', activityController.updateActivity);
+router.put('/api/activities/:id', requireAdminAuth, activityController.updateActivity);
 
 // Route to update activity status (archive/restore)
-router.put('/api/activities/:id/status', activityController.updateActivityStatus);
+router.put('/api/activities/:id/status', requireAdminAuth, activityController.updateActivityStatus);
 
 // DELETE route to remove a volunteer
-router.delete('/volunteers/:id', volunteerController.removeVolunteer);
+router.delete('/volunteers/:id', requireAdminAuth, volunteerController.removeVolunteer);
 
 // ✅ GET route to retrieve donation target
-router.get('/api/donation-target', async (req, res) => {
+router.get('/api/donation-target', requireAdminAuth, async (req, res) => {
   try {
     const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
     let target = await DonationTarget.findOne({ month: currentMonth });
@@ -62,7 +75,7 @@ router.get('/api/donation-target', async (req, res) => {
 });
 
 // ✅ POST route to set donation target
-router.post('/api/donation-target', async (req, res) => {
+router.post('/api/donation-target', requireAdminAuth, async (req, res) => {
   try {
     const { target } = req.body;
     const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
@@ -85,7 +98,7 @@ router.post('/api/donation-target', async (req, res) => {
 });
 
 // ✅ GET route to retrieve all approved volunteers
-router.get('/volunteers/approved', async (req, res) => {
+router.get('/volunteers/approved', requireAdminAuth, async (req, res) => {
   try {
     const approved = await Volunteer.find({ status: 'approved' });
     res.json(approved);
@@ -95,7 +108,7 @@ router.get('/volunteers/approved', async (req, res) => {
 });
 
 // ✅ GET route to view volunteer calendar (admin view)
-router.get('/volunteer-calendar', async (req, res) => {
+router.get('/volunteer-calendar', requireAdminAuth, async (req, res) => {
   try {
     const { month, year, volunteerId } = req.query;
     
