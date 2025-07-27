@@ -229,7 +229,7 @@
       
       <div class="form-group">
         <label for="slots">Available Slots</label>
-        <input type="number" id="slots" name="slots" required placeholder="Number of volunteer slots" min="1">
+        <input type="number" id="slots" name="slots" required placeholder="Number of volunteer slots" min="1" max="50">
       </div>
       
       <div class="form-group">
@@ -269,8 +269,80 @@
       fetchActivityDetails();
     }
 
+    // Set minimum date to today (prevent past dates)
+    function setMinDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const todayString = `${year}-${month}-${day}`;
+      
+      document.getElementById('date').setAttribute('min', todayString);
+    }
+
+    // Validate time selection (8 AM to 6 PM)
+    function validateTime() {
+      const timeInput = document.getElementById('time');
+      const selectedTime = timeInput.value;
+      
+      if (selectedTime) {
+        const [hours, minutes] = selectedTime.split(':').map(Number);
+        const timeInMinutes = hours * 60 + minutes;
+        const minTimeInMinutes = 8 * 60; // 8 AM
+        const maxTimeInMinutes = 18 * 60; // 6 PM
+        
+        if (timeInMinutes < minTimeInMinutes || timeInMinutes > maxTimeInMinutes) {
+          showError('Please select a time between 8:00 AM and 6:00 PM');
+          timeInput.value = '';
+          timeInput.focus();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Validate date selection (no past dates)
+    function validateDate() {
+      const dateInput = document.getElementById('date');
+      const selectedDate = new Date(dateInput.value);
+      const today = new Date();
+      
+      // Reset time to compare only dates
+      today.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
+      
+      if (selectedDate < today) {
+        showError('Please select a date from today onwards');
+        dateInput.value = '';
+        dateInput.focus();
+        return false;
+      }
+      return true;
+    }
+
+    // Validate slots (1 to 50)
+    function validateSlots() {
+      const slotsInput = document.getElementById('slots');
+      const slots = parseInt(slotsInput.value);
+      
+      if (slots < 1 || slots > 50) {
+        showError('Please enter a number of slots between 1 and 50');
+        slotsInput.value = '';
+        slotsInput.focus();
+        return false;
+      }
+      return true;
+    }
+
+    // Form submission validation
     document.getElementById('edit-activity-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
+      // Validate date, time, and slots before submission
+      if (!validateDate() || !validateTime() || !validateSlots()) {
+        return false;
+      }
+      
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData.entries());
 
@@ -294,6 +366,16 @@
         console.error('Error updating activity:', err);
         showError('An error occurred while updating the activity.');
       }
+    });
+
+    // Real-time validation
+    document.getElementById('date').addEventListener('change', validateDate);
+    document.getElementById('time').addEventListener('change', validateTime);
+    document.getElementById('slots').addEventListener('change', validateSlots);
+
+    // Initialize minimum date when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      setMinDate();
     });
   </script>
 </body>
