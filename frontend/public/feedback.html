@@ -184,34 +184,26 @@
     </footer>
     <script src="/loading.js"></script>
     <script>
-        // Environment-aware feedback API URL
-        const FEEDBACK_API_URL =
-            window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? '/feedback'
-                : 'https://your-backend-domain.com/feedback';
+        // Always use the Vercel Serverless Function endpoint
+        const FEEDBACK_API_URL = '/api/feedback';
 
         document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
             const msgDiv = document.getElementById('feedbackMsg');
-            
             try {
                 const data = {
                     name: form.name.value,
                     email: form.email.value,
                     message: form.message.value
                 };
-                
                 console.log('Sending feedback data:', data);
-                
                 const res = await fetch(FEEDBACK_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-                
                 console.log('Response status:', res.status);
-                
                 if (res.ok) {
                     const result = await res.json();
                     msgDiv.style.color = '#2563eb';
@@ -230,6 +222,8 @@
                 console.error('Fetch error:', error);
                 msgDiv.style.color = '#d32f2f';
                 msgDiv.textContent = `Network error: ${error.message}. Please check if the server is running.`;
+            } finally {
+                window.pageLoader.hide();
             }
         });
     </script>
