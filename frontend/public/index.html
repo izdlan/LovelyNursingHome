@@ -488,18 +488,8 @@
             document.getElementById('chatbot-window').style.display = 'none';
         };
 
-        // Simple FAQ-based chatbot logic
-        const faqAnswers = [
-            { q: /donate/i, a: "You can donate by clicking the 'Make a Donation' button and filling out the form. We accept Visa/MasterCard, FPX, and QRPay." },
-            { q: /volunteer/i, a: "To become a volunteer, click 'Become a Volunteer' and sign up. After admin approval, you can book activities." },
-            { q: /activity|event|majlis/i, a: "All upcoming volunteer activities are listed on this page. Click 'Sign Up to Join' to participate (login required)." },
-            { q: /location|where/i, a: "We are located in Petaling Jaya, Selangor. See the map in the About section for details." },
-            { q: /contact|phone|email/i, a: "You can contact us via WhatsApp at +6013-6281083 or use the feedback form on this site." },
-            { q: /feedback/i, a: "You can submit feedback using the 'Feedback' page. Admin will review and respond to your message." },
-            { q: /target|goal/i, a: "Our monthly donation target is shown in the Donors section. Thank you for your support!" },
-            { q: /admin/i, a: "Admin login is for staff only. Volunteers and donors do not need admin access." },
-            { q: /.*/, a: "Sorry, I don't have an answer for that. Please contact us directly or check the FAQ above!" }
-        ];
+        // Use the new chatbot FAQ from notification.js
+        const faqAnswers = window.chatbotFAQ || [];
 
         document.getElementById('chatbot-form').onsubmit = function(e) {
             e.preventDefault();
@@ -508,14 +498,17 @@
             if (!msg) return;
             addChatMessage('You', msg);
             let answered = false;
+            const lowerMsg = msg.toLowerCase();
             for (const faq of faqAnswers) {
-                if (faq.q.test(msg)) {
+                if (lowerMsg.includes(faq.q.toLowerCase())) {
                     setTimeout(() => addChatMessage('Bot', faq.a), 400);
                     answered = true;
                     break;
                 }
             }
-            if (!answered) setTimeout(() => addChatMessage('Bot', faqAnswers[faqAnswers.length-1].a), 400);
+            if (!answered) {
+                setTimeout(() => addChatMessage('Bot', "Sorry, I don't have an answer for that. Please contact us directly or check the FAQ above!"), 400);
+            }
             input.value = '';
         };
 
