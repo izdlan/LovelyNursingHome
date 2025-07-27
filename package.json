@@ -29,7 +29,7 @@
     "mongoose": "^8.15.2",
     "multer": "^2.0.1",
     "node-cron": "^4.2.0",
-    "nodemailer": "^7.0.4",
+    "nodemailer": "^7.0.5",
     "twilio": "^5.7.2"
   },
   "description": "A comprehensive nursing home management system with volunteer coordination, donation tracking, and activity management"
