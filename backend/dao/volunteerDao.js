@@ -11,6 +11,14 @@ exports.findVolunteerByEmail = async (email) => {
   return await Volunteer.findOne({ email });
 };
 
+exports.findVolunteerByPhone = async (phone) => {
+  return await Volunteer.findOne({ phone });
+};
+
+exports.findVolunteerByIC = async (icnumber) => {
+  return await Volunteer.findOne({ icnumber });
+};
+
 exports.deleteVolunteer = async (id) => {
   // Find all approved bookings by the volunteer
   const approvedBookings = await Booking.find({ volunteer: id, status: 'approved' });

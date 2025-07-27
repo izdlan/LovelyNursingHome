@@ -148,7 +148,7 @@
 
   <main>
     <a href="index.html" class="back-btn">← Back</a>
-    <form action="/volunteer/signup" method="POST">
+    <form id="signupForm">
       <input type="text" name="fullName" placeholder="Full Name" required>
       <input type="email" name="email" placeholder="Email" required>
       <input type="text" name="icnumber" placeholder="IC Number" required>
@@ -156,9 +156,106 @@
       <input type="password" name="password" placeholder="Password" required>
       <button type="submit">Sign Up</button>
     </form>
+    <div id="signupMessage" style="margin-top: 15px; padding: 10px; border-radius: 5px; display: none;"></div>
   </main>
   <footer>
     <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
   </footer>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const data = {
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+        icnumber: formData.get('icnumber'),
+        phone: formData.get('phone'),
+        password: formData.get('password')
+      };
+      
+      const messageDiv = document.getElementById('signupMessage');
+      const submitBtn = this.querySelector('button[type="submit"]');
+      
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing Up...';
+      messageDiv.style.display = 'none';
+      
+      try {
+        const response = await fetch('/volunteer/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          // Success - show notification and redirect
+          showSuccess('Registration successful! Redirecting...');
+          setTimeout(() => {
+            window.location.href = '/confirmation.html?title=Welcome!&text=Volunteer+registration+submitted+for+approval.&btn=Login&href=%2Fvolunteer_login.html';
+          }, 1500);
+        } else {
+          const result = await response.json();
+          
+          // Show error message using custom notification
+          showError(result.error || 'Signup failed. Please try again.');
+          
+          // Highlight the problematic field
+          if (result.field) {
+            const field = this.querySelector(`[name="${result.field}"]`);
+            if (field) {
+              field.style.borderColor = '#dc3545';
+              field.focus();
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showError('Network error. Please try again.');
+      } finally {
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign Up';
+      }
+    });
+    
+    // Clear field highlighting when user starts typing
+    document.querySelectorAll('#signupForm input').forEach(input => {
+      input.addEventListener('input', function() {
+        this.style.borderColor = '#cbd5e1';
+        // Clear any error messages when user starts typing
+        messageDiv.style.display = 'none';
+      });
+    });
+    
+    // Add basic client-side validation
+    document.querySelector('#signupForm input[name="email"]').addEventListener('blur', function() {
+      const email = this.value.trim();
+      if (email && !email.includes('@')) {
+        this.style.borderColor = '#dc3545';
+        showError('Please enter a valid email address');
+      }
+    });
+    
+    document.querySelector('#signupForm input[name="phone"]').addEventListener('blur', function() {
+      const phone = this.value.trim();
+      if (phone && phone.length < 10) {
+        this.style.borderColor = '#dc3545';
+        showError('Please enter a valid phone number');
+      }
+    });
+    
+    document.querySelector('#signupForm input[name="icnumber"]').addEventListener('blur', function() {
+      const ic = this.value.trim();
+      if (ic && ic.length < 12) {
+        this.style.borderColor = '#dc3545';
+        showError('Please enter a valid IC number');
+      }
+    });
+  </script>
 </body>
 </html>

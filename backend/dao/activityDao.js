@@ -23,6 +23,16 @@ exports.updateActivityStatus = async (id, status) => {
 };
 
 exports.bookActivity = async (activityId, volunteerId) => {
+  // Check if volunteer has already booked this activity
+  const existingBooking = await Booking.findOne({ 
+    activity: activityId, 
+    volunteer: volunteerId 
+  });
+  
+  if (existingBooking) {
+    throw new Error('You have already booked this activity');
+  }
+  
   // Decrement slot if available
   const activity = await Activity.findOneAndUpdate(
     { _id: activityId, slots: { $gt: 0 }, status: 'active' },
@@ -30,6 +40,7 @@ exports.bookActivity = async (activityId, volunteerId) => {
     { new: true }
   );
   if (!activity) throw new Error('No slots available or activity is archived');
+  
   // Create booking with status 'pending'
   const booking = new Booking({ activity: activityId, volunteer: volunteerId, status: 'pending' });
   await booking.save();

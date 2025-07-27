@@ -182,22 +182,35 @@
       });
 
     // Fetch and display available activities
-    fetch('/volunteer/api/activities', {
-      credentials: 'include'
-    })
-      .then(res => res.json())
-      .then(data => {
+    async function loadActivities() {
+      try {
+        // Fetch activities and bookings in parallel
+        const [activitiesRes, bookingsRes] = await Promise.all([
+          fetch('/volunteer/api/activities', { credentials: 'include' }),
+          fetch('/volunteer/my-bookings', { credentials: 'include' })
+        ]);
+        
+        const activities = await activitiesRes.json();
+        const bookings = await bookingsRes.json();
+        
+        // Create a set of booked activity IDs for quick lookup
+        const bookedActivityIds = new Set(bookings.map(booking => booking.activity._id));
+        
         const list = document.getElementById('activities-list');
-        if (data.length === 0) {
+        if (activities.length === 0) {
           list.innerHTML = '<p>No volunteer activities available at the moment.</p>';
           return;
         }
-        data.forEach(activity => {
+        
+        list.innerHTML = ''; // Clear existing content
+        
+        activities.forEach(activity => {
           const card = document.createElement('div');
           card.className = 'activity-card';
-
+          
           const imagePath = activity.image ? activity.image : '/images/default.jpg'; // Fallback image
-
+          const isBooked = bookedActivityIds.has(activity._id);
+          
           card.innerHTML = `
             <img src="${imagePath}" alt="Activity Image" />
             <div class="activity-details">
@@ -206,12 +219,22 @@
               <p><strong>Time:</strong> ${activity.time || '-'}</p>
               <p><strong>Slots:</strong> ${activity.slots || '-'}</p>
               <p>${activity.description}</p>
-              <button onclick="bookActivity('${activity._id}')">Book</button>
+              ${isBooked ? 
+                '<button disabled style="background: #28a745; color: white; cursor: not-allowed; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600;">✓ Already Booked</button>' : 
+                `<button onclick="bookActivity('${activity._id}')" style="background: linear-gradient(90deg, #3578c7 0%, #004080 100%); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Book</button>`
+              }
             </div>
           `;
           list.appendChild(card);
         });
-      });
+      } catch (error) {
+        console.error('Error loading activities:', error);
+        document.getElementById('activities-list').innerHTML = '<p>Error loading activities. Please try again.</p>';
+      }
+    }
+    
+    // Load activities when page loads
+    loadActivities();
 
     function bookActivity(activityId) {
       showBookingConfirmModal(activityId);
@@ -275,10 +298,20 @@
         })
         .then(msg => {
           showDashboardConfirmation('Booking submitted!');
-          setTimeout(() => location.reload(), 1800);
+          // Refresh activities list and calendar to show updated booking status
+          setTimeout(() => {
+            loadActivities();
+            loadCalendarData();
+          }, 1800);
         })
         .catch(err => {
-          showDashboardConfirmation('Error: ' + err.message, true);
+          let errorMessage = 'Error: ' + err.message;
+          if (err.message.includes('already booked')) {
+            errorMessage = 'You have already booked this activity!';
+            // Refresh the activities list to show updated status
+            setTimeout(() => loadActivities(), 1000);
+          }
+          showDashboardConfirmation(errorMessage, true);
         });
     }
 
@@ -316,12 +349,14 @@
       }, isError ? 3000 : 1500);
     }
 
-    // Load volunteer's booked activities
-    fetch('/volunteer/my-bookings', {
-      credentials: 'include'
-    })
-      .then(res => res.json())
-      .then(data => {
+    // Function to load volunteer's booked activities
+    async function loadCalendarData() {
+      try {
+        const res = await fetch('/volunteer/my-bookings', {
+          credentials: 'include'
+        });
+        const data = await res.json();
+        
         const calendar = document.getElementById('calendar');
         if (data.length === 0) {
           calendar.innerHTML = '<p>No booked activities yet.</p>';
@@ -344,7 +379,14 @@
         `;
         calendar.innerHTML = '';
         calendar.appendChild(table);
-      });
+      } catch (error) {
+        console.error('Error loading calendar data:', error);
+        document.getElementById('calendar').innerHTML = '<p>Error loading booked activities. Please try again.</p>';
+      }
+    }
+    
+    // Load calendar data when page loads
+    loadCalendarData();
   </script>
   <footer>
     <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
