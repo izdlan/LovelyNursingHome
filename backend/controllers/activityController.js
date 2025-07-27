@@ -84,14 +84,10 @@ exports.getAdminActivities = async (req, res) => {
 
 exports.getVolunteerActivities = async (req, res) => {
   try {
-    console.log('Fetching volunteer activities...');
     const activities = await activityDao.getAllActivities({ status: 'active' });
-    console.log('Found activities:', activities.length);
-    console.log('Activities:', activities);
     res.json(activities);
   } catch (err) {
-    console.error('Error in getVolunteerActivities:', err);
-    res.status(500).json({ error: 'Error fetching activities', details: err.message });
+    res.status(500).send('Error fetching activities');
   }
 };
 

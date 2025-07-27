@@ -263,11 +263,6 @@
         // Load and display volunteer activities
         async function loadActivities() {
             try {
-                // First, let's debug what's in the database
-                const debugResponse = await fetch('/debug-activities');
-                const debugData = await debugResponse.json();
-                console.log('Debug data:', debugData);
-                
                 const response = await fetch('/volunteer/api/activities');
                 const activities = await response.json();
                 

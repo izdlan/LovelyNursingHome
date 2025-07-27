@@ -151,6 +151,25 @@ app.use('/feedback', feedbackRoute);
 app.use('/api/feedback', feedbackRoute);
 app.use('/donor', donorRoutes);
 
+// Public endpoint to get donation target (for homepage)
+app.get('/api/donation-target', async (req, res) => {
+  try {
+    const DonationTarget = require('./models/DonationTarget');
+    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
+    let target = await DonationTarget.findOne({ month: currentMonth });
+    
+    if (!target) {
+      // If no target for current month, get the most recent target
+      target = await DonationTarget.findOne().sort({ createdAt: -1 });
+    }
+    
+    res.json({ target: target ? target.target : null });
+  } catch (error) {
+    console.error('Error fetching donation target:', error);
+    res.status(500).json({ error: 'Failed to fetch donation target' });
+  }
+});
+
 // Debug endpoint to check activities in database
 app.get('/debug-activities', async (req, res) => {
   try {

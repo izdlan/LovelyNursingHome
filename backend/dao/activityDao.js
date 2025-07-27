@@ -7,10 +7,7 @@ exports.createActivity = async (activityData) => {
 };
 
 exports.getAllActivities = async (filter = {}) => {
-  console.log('Getting all activities with filter:', filter);
-  const activities = await Activity.find(filter);
-  console.log('Found activities:', activities.length);
-  return activities;
+  return await Activity.find(filter);
 };
 
 exports.getActivityById = async (id) => {
