@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback - Lovely Nursing Home</title>
     <link rel="stylesheet" href="styles2.css">
-    <script src="/loading.js"></script>
     <script src="/notification.js"></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -183,7 +182,14 @@
     <footer>
       <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
     </footer>
+    <script src="/loading.js"></script>
     <script>
+        // Environment-aware feedback API URL
+        const FEEDBACK_API_URL =
+            window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? '/feedback'
+                : 'https://your-backend-domain.com/feedback';
+
         document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
@@ -198,7 +204,7 @@
                 
                 console.log('Sending feedback data:', data);
                 
-                const res = await fetch('/feedback', {
+                const res = await fetch(FEEDBACK_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
