@@ -200,6 +200,10 @@ footer p {
   color: white !important;
 }
 
+footer * {
+  color: white !important;
+}
+
 html {
   scroll-behavior: smooth;
 }

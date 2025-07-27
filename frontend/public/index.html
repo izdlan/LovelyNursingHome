@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lovely Nursing Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=1.1">
     <script src="loading.js"></script>
     <script src="notification.js"></script>
+    <style>
+      /* Force footer text to be white with maximum specificity */
+      body footer,
+      body footer p,
+      body footer *,
+      html body footer,
+      html body footer p,
+      html body footer * {
+        color: #ffffff !important;
+        color: white !important;
+      }
+    </style>
     <style>
 
       .bg-slideshow {
@@ -151,6 +163,10 @@
       }
       
       footer p {
+        color: #fff !important;
+      }
+      
+      footer * {
         color: #fff !important;
       }
       @media (max-width: 600px) {
