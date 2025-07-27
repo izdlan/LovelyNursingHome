@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // ✅ POST route to add activity
-router.post('/add-activity', upload.single('image'), activityController.addActivity);
+router.post('/add-activity', activityController.addActivity);
 
 // ✅ GET route to retrieve all activities
 router.get('/api/activities', requireAdminAuth, activityController.getAdminActivities);

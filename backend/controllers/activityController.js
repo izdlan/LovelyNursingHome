@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 
 exports.addActivity = async (req, res) => {
   try {
-    const { title, description, date, time, slots } = req.body;
-    const image = '/uploads/' + req.file.filename;
+    const { title, description, date, time, slots, imageUrl } = req.body;
+    const image = imageUrl; // Cloudinary URL
     await activityDao.createActivity({ title, description, date, time, slots, image });
 
     // Send email to all approved volunteers

@@ -226,7 +226,7 @@
   </header>
   <div class="container">
     <h2>Add Volunteer Activity</h2>
-    <form action="/admin/add-activity" method="POST" enctype="multipart/form-data">
+    <form id="addActivityForm" action="/admin/add-activity" method="POST">
       <div class="form-group">
         <label for="title">Activity Title</label>
         <input type="text" id="title" name="title" required placeholder="Enter activity title">
@@ -250,6 +250,7 @@
       <div class="form-group">
         <label for="image">Activity Image</label>
         <input type="file" id="image" name="image" accept="image/*" required>
+        <input type="hidden" id="imageUrl" name="imageUrl">
       </div>
       
       <div class="form-group">
@@ -353,6 +354,40 @@
       const timeInput = document.getElementById('time');
       if (!timeInput.value) {
         timeInput.value = '09:00';
+      }
+    });
+
+    async function uploadToCloudinary(file) {
+      const url = 'https://api.cloudinary.com/v1_1/dyrvoflma/image/upload';
+      const preset = 'activity_picture';
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', preset);
+      const res = await fetch(url, {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      return data.secure_url;
+    }
+
+    document.getElementById('addActivityForm').addEventListener('submit', async function(e) {
+      const fileInput = document.getElementById('image');
+      const file = fileInput.files[0];
+      if (!file) {
+        showError('Please select an image.');
+        e.preventDefault();
+        return;
+      }
+      // Show loading indicator if you want
+      e.preventDefault();
+      try {
+        const imageUrl = await uploadToCloudinary(file);
+        document.getElementById('imageUrl').value = imageUrl;
+        // Now submit the form data (including imageUrl) to your backend
+        this.submit();
+      } catch (err) {
+        showError('Image upload failed. Please try again.');
       }
     });
   </script>
