@@ -136,12 +136,16 @@ footer {
     text-align: center;
     padding: 24px;
     background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
-    color: white;
+    color: white !important;
     font-size: 1.08rem;
     letter-spacing: 0.01em;
     margin-top: 40px;
     border-radius: 0 0 12px 12px;
     box-shadow: 0 -2px 8px rgba(53,120,199,0.07);
+}
+
+footer p {
+    color: white !important;
 }
 
 /* Confirmation message box */

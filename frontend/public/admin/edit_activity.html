@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Edit Activity - Lovely Nursing Home</title>
   <link rel="stylesheet" href="/styles.css">
+  <script src="/loading.js"></script>
+  <script src="/notification.js"></script>
   <style>
     body {
       background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
@@ -259,7 +261,7 @@
         document.getElementById('slots').value = activity.slots;
       } catch (err) {
         console.error('Error fetching activity details:', err);
-        alert('Could not load activity details.');
+        showError('Could not load activity details.');
       }
     }
 
@@ -282,15 +284,15 @@
         });
 
         if (response.ok) {
-          alert('Activity updated successfully!');
+          showSuccess('Activity updated successfully!');
           window.location.href = '/admin/dashboard.html';
         } else {
           const result = await response.json();
-          alert(`Failed to update activity: ${result.message}`);
+          showError(`Failed to update activity: ${result.message}`);
         }
       } catch (err) {
         console.error('Error updating activity:', err);
-        alert('An error occurred while updating the activity.');
+        showError('An error occurred while updating the activity.');
       }
     });
   </script>
