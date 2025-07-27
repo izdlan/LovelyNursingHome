@@ -84,7 +84,12 @@ exports.getAdminActivities = async (req, res) => {
 
 exports.getVolunteerActivities = async (req, res) => {
   try {
-    const activities = await activityDao.getAllActivities({ status: 'active' });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const activities = await activityDao.getAllActivities({
+      status: 'active',
+      date: { $gte: today }
+    });
     res.json(activities);
   } catch (err) {
     res.status(500).send('Error fetching activities');
