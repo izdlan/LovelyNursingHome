@@ -7,22 +7,6 @@ const Volunteer = require('../models/Volunteer');
 
 router.get('/api/activities', activityController.getVolunteerActivities);
 
-// Debug endpoint to check all activities in database
-router.get('/debug-activities', async (req, res) => {
-  try {
-    const Activity = require('../models/Activity');
-    const allActivities = await Activity.find({});
-    console.log('All activities in database:', allActivities);
-    res.json({
-      totalActivities: allActivities.length,
-      activities: allActivities
-    });
-  } catch (error) {
-    console.error('Debug activities error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // New endpoint to get current volunteer info
 // Debug endpoint to check session
 router.get('/api/session-debug', (req, res) => {

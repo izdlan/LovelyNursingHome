@@ -263,84 +263,46 @@
         // Load and display volunteer activities
         async function loadActivities() {
             try {
-                console.log('Fetching activities from /volunteer/api/activities...');
-                
-                // First, let's test the debug endpoint
-                try {
-                    const debugResponse = await fetch('/volunteer/debug-activities');
-                    if (debugResponse.ok) {
-                        const debugData = await debugResponse.json();
-                        console.log('Debug - All activities in database:', debugData);
-                    }
-                } catch (debugError) {
-                    console.log('Debug endpoint error:', debugError);
-                }
+                // First, let's debug what's in the database
+                const debugResponse = await fetch('/debug-activities');
+                const debugData = await debugResponse.json();
+                console.log('Debug data:', debugData);
                 
                 const response = await fetch('/volunteer/api/activities');
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const activities = await response.json();
+                
                 console.log('Activities loaded:', activities); // Debug log
                 
                 const activitiesList = document.querySelector('#activities-list');
                 
                 if (activities.length === 0) {
-                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No activities available at the moment. Check back soon!</p>';
+                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No active activities available at the moment. Check back soon!</p>';
                     return;
                 }
 
-                // Filter for active activities and sort by date (upcoming first)
-                const currentDate = new Date();
-                currentDate.setHours(0, 0, 0, 0); // Reset time to compare only dates
+                // Filter for future activities and sort by date (upcoming first)
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Reset time to compare only dates
                 
-                console.log('Current date:', currentDate);
-                console.log('All activities before filtering:', activities);
-                
-                const availableActivities = activities.filter(activity => {
+                const futureActivities = activities.filter(activity => {
                     const activityDate = new Date(activity.date);
                     activityDate.setHours(0, 0, 0, 0);
-                    const isFutureOrToday = activityDate >= currentDate;
-                    const isActive = activity.status === 'active';
-                    const hasSlots = activity.slots > 0;
-                    
-                    console.log(`Activity: ${activity.title}`, {
-                        date: activity.date,
-                        activityDate: activityDate,
-                        status: activity.status,
-                        slots: activity.slots,
-                        isFutureOrToday,
-                        isActive,
-                        hasSlots,
-                        passes: isFutureOrToday && isActive && hasSlots
-                    });
-                    
-                    return isFutureOrToday && isActive && hasSlots;
+                    return activityDate >= today;
                 });
                 
-                console.log('Available activities after filtering:', availableActivities);
-                
-                const sortedActivities = availableActivities
-                    .sort((a, b) => new Date(a.date) - new Date(b.date)); // Show all available activities
+                const sortedActivities = futureActivities
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 4); // Show at most 4 activities
 
                 console.log('Sorted activities:', sortedActivities); // Debug log
 
                 if (sortedActivities.length === 0) {
-                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No upcoming activities available at the moment. Check back soon for new volunteer opportunities!</p>';
+                    activitiesList.innerHTML = '<p style="text-align: center; color: #666;">No upcoming activities available at the moment. Check back soon!</p>';
                     return;
                 }
 
-                // Add activity count header
-                const activityCount = sortedActivities.length;
-                const countText = activityCount === 1 ? '1 Available Activity' : `${activityCount} Available Activities`;
-                activitiesList.innerHTML = `<h3 style="text-align: center; color: #3578c7; margin-bottom: 25px; font-size: 1.3rem;">${countText}</h3>`;
-
                 const activitiesHTML = `
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                         ${sortedActivities.map(activity => {
                             const activityDate = new Date(activity.date).toLocaleDateString('en-MY', {
                                 weekday: 'long',
@@ -388,22 +350,11 @@
                     </div>
                 `;
                 
-                activitiesList.innerHTML += activitiesHTML;
-                
-                // Add signup button if there are activities
-                if (sortedActivities.length > 0) {
-                    activitiesList.innerHTML += `
-                        <div style="text-align: center; margin-top: 30px;">
-                            <a href="volunteer_login.html" style="background: linear-gradient(90deg, #3578c7 0%, #004080 100%); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(53, 120, 199, 0.2);">
-                                Sign Up to Join Activities
-                            </a>
-                        </div>
-                    `;
-                }
+                activitiesList.innerHTML = activitiesHTML;
                 
             } catch (error) {
                 console.error('Error loading activities:', error);
-                document.querySelector('#activities-list').innerHTML = '<p style="text-align: center; color: #666;">Unable to load activities at the moment. Please try again later.</p>';
+                document.querySelector('#activities-list').innerHTML = '<p style="text-align: center; color: #666;">Unable to load active activities at the moment.</p>';
             }
         }
 

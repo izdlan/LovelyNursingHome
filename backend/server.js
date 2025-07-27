@@ -151,5 +151,28 @@ app.use('/feedback', feedbackRoute);
 app.use('/api/feedback', feedbackRoute);
 app.use('/donor', donorRoutes);
 
+// Debug endpoint to check activities in database
+app.get('/debug-activities', async (req, res) => {
+  try {
+    const allActivities = await Activity.find();
+    const activeActivities = await Activity.find({ status: 'active' });
+    const futureActivities = await Activity.find({ 
+      status: 'active',
+      date: { $gte: new Date() }
+    });
+    
+    res.json({
+      totalActivities: allActivities.length,
+      activeActivities: activeActivities.length,
+      futureActivities: futureActivities.length,
+      allActivities: allActivities,
+      activeActivitiesList: activeActivities,
+      futureActivitiesList: futureActivities
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Export the app to be used in index.js
 module.exports = app;

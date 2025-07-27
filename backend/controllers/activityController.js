@@ -90,8 +90,8 @@ exports.getVolunteerActivities = async (req, res) => {
     console.log('Activities:', activities);
     res.json(activities);
   } catch (err) {
-    console.error('Error fetching volunteer activities:', err);
-    res.status(500).send('Error fetching activities');
+    console.error('Error in getVolunteerActivities:', err);
+    res.status(500).json({ error: 'Error fetching activities', details: err.message });
   }
 };
 
