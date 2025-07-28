@@ -203,6 +203,46 @@ app.get('/admin/feedbacks/all', async (req, res) => {
   }
 });
 
+// Admin endpoint to reply to feedback
+app.post('/admin/feedbacks/:id/reply', async (req, res) => {
+  try {
+    console.log('=== ADMIN REPLYING TO FEEDBACK ===');
+    console.log('Feedback ID:', req.params.id);
+    console.log('Reply data:', req.body);
+    
+    const { id } = req.params;
+    const { reply } = req.body;
+    
+    const Feedback = require('./models/Feedback');
+    const feedback = await Feedback.findByIdAndUpdate(id, { reply }, { new: true });
+    
+    if (!feedback) {
+      console.log('Feedback not found');
+      return res.status(404).json({ message: 'Feedback not found' });
+    }
+    
+    console.log('Feedback updated successfully');
+    
+    // Send email TO the user who submitted the feedback
+    try {
+      const { sendEmail } = require('./services/emailNotifier');
+      const subject = 'Reply to your feedback - Lovely Nursing Home';
+      const emailBody = `Dear ${feedback.name},\n\nThank you for your feedback. Here is our response:\n\n${reply}\n\nBest regards,\nLovely Nursing Home Team`;
+      
+      await sendEmail(feedback.email, subject, emailBody);
+      console.log('Reply email sent to user:', feedback.email);
+    } catch (emailError) {
+      console.error('Failed to send reply email:', emailError);
+      // Don't fail the reply if email fails
+    }
+    
+    res.json({ message: 'Reply sent and saved', feedback });
+  } catch (error) {
+    console.error('Error replying to feedback:', error);
+    res.status(500).json({ message: 'Error replying to feedback', error: error.message });
+  }
+});
+
 app.use('/admin', adminRoutes);
 app.use('/volunteer', volunteerRoutes);
 app.use('/donate', donateRoutes);
