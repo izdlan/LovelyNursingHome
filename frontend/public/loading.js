@@ -41,7 +41,7 @@ class PageLoader {
     }
 
     show() {
-        if (!document.getElementById('page-loader')) {
+        if (document.body && !document.getElementById('page-loader')) {
             document.body.insertAdjacentHTML('afterbegin', this.loadingHtml);
         }
     }
@@ -72,11 +72,16 @@ class PageLoader {
 // Global loader instance
 window.pageLoader = new PageLoader();
 
-// Show loader immediately when script loads
-window.pageLoader.show();
-
-// Auto-hide when page is ready
-window.pageLoader.autoHide();
+// Only initialize after DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        window.pageLoader.show();
+        window.pageLoader.autoHide();
+    });
+} else {
+    window.pageLoader.show();
+    window.pageLoader.autoHide();
+}
 
 // Show loader when navigating to new pages
 document.addEventListener('click', function(e) {

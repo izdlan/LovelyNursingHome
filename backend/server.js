@@ -133,6 +133,10 @@ app.get('/admin/add_activity.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/public/admin/add_activity.html'));
 });
 
+app.get('/admin/feedbacks.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/public/admin/feedbacks.html'));
+});
+
 app.use('/admin', adminRoutes);
 app.use('/volunteer', volunteerRoutes);
 app.use('/donate', donateRoutes);
