@@ -184,8 +184,8 @@
     </footer>
     <script src="/loading.js"></script>
     <script>
-        // Always use the Vercel Serverless Function endpoint
-        const FEEDBACK_API_URL = '/api/feedback';
+        // Use Express backend endpoint (like add activity)
+        const FEEDBACK_API_URL = '/feedback';
 
         document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
             e.preventDefault();
