@@ -41,6 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('chatbot-form').onsubmit = function(e) {
     e.preventDefault();
+    
+    // Stop loading spinner from showing when chatbot form is submitted
+    e.stopPropagation();
+    
     const input = document.getElementById('chatbot-input');
     const msg = input.value.trim();
     if (!msg) return;
