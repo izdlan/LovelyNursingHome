@@ -51,6 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
     addChatMessage('You', msg);
     let answered = false;
     const lowerMsg = msg.toLowerCase();
+    
+    // Extract keywords from the user's message
+    const keywords = lowerMsg.split(/\s+/);
+    
+    // First try to find exact matches (for short queries)
     for (const faq of faqAnswers) {
       if (lowerMsg.includes(faq.q.toLowerCase())) {
         setTimeout(() => addChatMessage('Bot', faq.a), 400);
@@ -58,9 +63,31 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
     }
+    
+    // If no exact match, try to match keywords
+    if (!answered) {
+      for (const keyword of keywords) {
+        // Skip very short keywords (less than 3 characters)
+        if (keyword.length < 3) continue;
+        
+        for (const faq of faqAnswers) {
+          const lowerQuestion = faq.q.toLowerCase();
+          // Check if the keyword is in the question
+          if (lowerQuestion.includes(keyword)) {
+            setTimeout(() => addChatMessage('Bot', faq.a), 400);
+            answered = true;
+            break;
+          }
+        }
+        if (answered) break; // Exit keyword loop if we found a match
+      }
+    }
+    
+    // If still no answer, respond with default message
     if (!answered) {
       setTimeout(() => addChatMessage('Bot', "Sorry, I don't have an answer for that. Please contact us directly or check the FAQ above!"), 400);
     }
+    
     input.value = '';
   };
 
