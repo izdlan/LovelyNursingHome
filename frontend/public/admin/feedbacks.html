@@ -193,8 +193,8 @@
     let feedbacks = [];
     async function fetchFeedbacks() {
       try {
-        // Use Express backend endpoint
-        const res = await fetch('/feedback/all');
+        // Use admin-specific endpoint
+        const res = await fetch('/admin/feedbacks/all');
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }

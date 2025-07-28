@@ -189,6 +189,20 @@ app.get('/admin/feedbacks.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/public/admin/feedbacks.html'));
 });
 
+// Admin endpoint to get all feedbacks
+app.get('/admin/feedbacks/all', async (req, res) => {
+  try {
+    console.log('=== ADMIN GETTING ALL FEEDBACKS ===');
+    const Feedback = require('./models/Feedback');
+    const feedbacks = await Feedback.find().sort({ createdAt: -1 });
+    console.log('Found feedbacks:', feedbacks.length);
+    res.json(feedbacks);
+  } catch (error) {
+    console.error('Error fetching feedbacks:', error);
+    res.status(500).json({ error: 'Failed to fetch feedbacks' });
+  }
+});
+
 app.use('/admin', adminRoutes);
 app.use('/volunteer', volunteerRoutes);
 app.use('/donate', donateRoutes);
