@@ -21,11 +21,30 @@ exports.submitFeedback = async (req, res) => {
             const rawBody = req.rawBody || '';
             console.log('Raw body:', rawBody);
             
-            // Try to parse as URL-encoded form data
-            const urlParams = new URLSearchParams(rawBody);
-            name = urlParams.get('name');
-            email = urlParams.get('email');
-            message = urlParams.get('message');
+            // Parse multipart/form-data
+            if (rawBody.includes('Content-Disposition: form-data')) {
+                console.log('Detected multipart/form-data, parsing...');
+                
+                // Extract name
+                const nameMatch = rawBody.match(/name="name"\r?\n\r?\n([^\r\n]+)/);
+                name = nameMatch ? nameMatch[1] : null;
+                
+                // Extract email
+                const emailMatch = rawBody.match(/name="email"\r?\n\r?\n([^\r\n]+)/);
+                email = emailMatch ? emailMatch[1] : null;
+                
+                // Extract message
+                const messageMatch = rawBody.match(/name="message"\r?\n\r?\n([^\r\n]+)/);
+                message = messageMatch ? messageMatch[1] : null;
+                
+                console.log('Parsed multipart data:', { name, email, message });
+            } else {
+                // Try to parse as URL-encoded form data
+                const urlParams = new URLSearchParams(rawBody);
+                name = urlParams.get('name');
+                email = urlParams.get('email');
+                message = urlParams.get('message');
+            }
         }
         
         console.log('Extracted data:', { name, email, message });
