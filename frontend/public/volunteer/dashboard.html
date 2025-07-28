@@ -182,8 +182,8 @@
           console.log('Volunteer ID loaded:', currentVolunteerId);
           // Display volunteer name in header
           const volunteerNameElement = document.getElementById('volunteer-name');
-          if (volunteerNameElement && data.name) {
-            volunteerNameElement.textContent = `Welcome, ${data.name}`;
+          if (volunteerNameElement && data.fullName) {
+            volunteerNameElement.textContent = `Welcome, ${data.fullName}`;
           }
         }
       })
