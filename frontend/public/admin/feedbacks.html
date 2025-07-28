@@ -193,6 +193,11 @@
     let feedbacks = [];
     async function fetchFeedbacks() {
       try {
+        // Show loading spinner
+        if (window.pageLoader) {
+          window.pageLoader.show();
+        }
+        
         // Use admin-specific endpoint
         const res = await fetch('/admin/feedbacks/all');
         if (!res.ok) {
@@ -205,6 +210,11 @@
       } catch (error) {
         console.error('Error fetching feedbacks:', error);
         document.getElementById('feedbacks-list').innerHTML = '<p style="color: red;">Error loading feedbacks: ' + error.message + '</p>';
+      } finally {
+        // Hide loading spinner
+        if (window.pageLoader) {
+          window.pageLoader.hide();
+        }
       }
     }
     function renderFeedbacks() {
@@ -249,10 +259,18 @@
       
       statusDiv.textContent = 'Sending...';
       
+      // Show loading spinner
+      if (window.pageLoader) {
+        window.pageLoader.show();
+      }
+      
       // Find the feedback by ID
       const feedback = feedbacks.find(fb => fb._id === id);
       if (!feedback) {
         statusDiv.textContent = 'Error: Feedback not found.';
+        if (window.pageLoader) {
+          window.pageLoader.hide();
+        }
         return;
       }
       
@@ -275,15 +293,29 @@
           console.log('Reply successful:', result);
           statusDiv.textContent = 'Reply sent successfully!';
           await fetchFeedbacks();
-          setTimeout(closeModal, 1000);
+          setTimeout(() => {
+            closeModal();
+            // Hide loading spinner after modal closes
+            if (window.pageLoader) {
+              window.pageLoader.hide();
+            }
+          }, 1000);
         } else {
           const errorData = await response.text();
           console.error('Reply failed:', response.status, errorData);
           statusDiv.textContent = 'Error sending reply: ' + response.status;
+          // Hide loading spinner on error
+          if (window.pageLoader) {
+            window.pageLoader.hide();
+          }
         }
       } catch (e) {
         console.error('Reply send failed:', e.message);
         statusDiv.textContent = 'Error sending reply: ' + e.message;
+        // Hide loading spinner on error
+        if (window.pageLoader) {
+          window.pageLoader.hide();
+        }
       }
     };
     window.closeModal = closeModal;
