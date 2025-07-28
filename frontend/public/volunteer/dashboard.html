@@ -362,6 +362,7 @@
           calendar.innerHTML = '<p>No booked activities yet.</p>';
           return;
         }
+        
         const table = document.createElement('table');
         table.style.width = '100%';
         table.style.borderCollapse = 'collapse';
@@ -369,12 +370,33 @@
         table.style.borderRadius = '8px';
         table.style.overflow = 'hidden';
         table.style.boxShadow = '0 1px 4px rgba(0,0,0,0.06)';
+        
+        // Get current date for comparison
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+        
         table.innerHTML = `
           <thead style="background: #2563eb; color: #fff;">
             <tr><th style="padding: 12px;">Activity</th><th style="padding: 12px;">Date</th><th style="padding: 12px;">Time</th><th style="padding: 12px;">Status</th></tr>
           </thead>
           <tbody>
-            ${data.map(b => `<tr><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.title || '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.date ? new Date(b.activity.date).toLocaleDateString() : '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.time || '-'}</td><td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.status}</td></tr>`).join('')}
+            ${data.map(b => {
+              const activityDate = b.activity?.date ? new Date(b.activity.date) : null;
+              const isPastActivity = activityDate && activityDate < today;
+              
+              // Determine status to display
+              let statusToShow = b.status;
+              if (isPastActivity) {
+                statusToShow = 'Past Activity';
+              }
+              
+              return `<tr>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.title || '-'}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${activityDate ? activityDate.toLocaleDateString() : '-'}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.time || '-'}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee; color: ${isPastActivity ? '#6b7280' : '#059669'};'>${statusToShow}</td>
+              </tr>`;
+            }).join('')}
           </tbody>
         `;
         calendar.innerHTML = '';
