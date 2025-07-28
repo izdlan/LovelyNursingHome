@@ -194,7 +194,10 @@
         const bookings = await bookingsRes.json();
         
         // Create a set of booked activity IDs for quick lookup
-        const bookedActivityIds = new Set(bookings.map(booking => booking.activity._id));
+        const bookedActivityIds = new Set(bookings
+          .filter(booking => booking.activity && booking.activity._id) // Filter out null/undefined activities
+          .map(booking => booking.activity._id)
+        );
         
         const list = document.getElementById('activities-list');
         if (activities.length === 0) {
