@@ -7,20 +7,8 @@ exports.submitFeedback = async (req, res) => {
         const feedback = new Feedback({ name, email, message });
         await feedback.save();
         
-        // Send email notification to admin (similar to add activity)
-        try {
-            const subject = `New Feedback Received from ${name}`;
-            const emailBody = `Dear Admin,\n\nA new feedback has been submitted:\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}\n\nPlease log in to your admin dashboard to review and respond to this feedback.\n\nThank you,\nLovely Nursing Home System`;
-            
-            // Send to admin email (you can set this in environment variables)
-            const adminEmail = process.env.ADMIN_EMAIL || 'admin@lovelynursinghome.com';
-            await sendEmail(adminEmail, subject, emailBody);
-            
-            console.log('Feedback email sent to admin');
-        } catch (emailError) {
-            console.error('Failed to send feedback email:', emailError);
-            // Don't fail the feedback submission if email fails
-        }
+        // NO email to admin - admin will see feedback in dashboard
+        console.log('Feedback submitted successfully:', feedback._id);
         
         // Redirect like add activity does
         res.redirect('/confirmation.html?title=Feedback+Submitted!&text=Thank+you+for+your+feedback.+We+will+get+back+to+you+soon.&btn=Submit+Another+Feedback&href=%2Ffeedback.html');
@@ -47,13 +35,19 @@ exports.replyToFeedback = async (req, res) => {
         const { reply } = req.body;
         const feedback = await Feedback.findByIdAndUpdate(id, { reply }, { new: true });
         if (!feedback) return res.status(404).json({ message: 'Feedback not found' });
-        // Send email to user
-        const emailNotifier = require('../services/emailNotifier');
-        await emailNotifier.sendEmail(
-            feedback.email,
-            'Reply to your feedback',
-            reply
-        );
+        
+        // Send email TO the user who submitted the feedback
+        try {
+            const subject = 'Reply to your feedback - Lovely Nursing Home';
+            const emailBody = `Dear ${feedback.name},\n\nThank you for your feedback. Here is our response:\n\n${reply}\n\nBest regards,\nLovely Nursing Home Team`;
+            
+            await sendEmail(feedback.email, subject, emailBody);
+            console.log('Reply email sent to user:', feedback.email);
+        } catch (emailError) {
+            console.error('Failed to send reply email:', emailError);
+            // Don't fail the reply if email fails
+        }
+        
         res.json({ message: 'Reply sent and saved', feedback });
     } catch (error) {
         res.status(500).json({ message: 'Error replying to feedback', error });
