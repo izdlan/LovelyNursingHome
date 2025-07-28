@@ -141,11 +141,16 @@
 </head>
 <body>
   <header>
-    <nav style="margin: 0 auto;">
-      <a href="/volunteer/dashboard.html">Dashboard</a>
-      <a href="/volunteer/calendar.html">Calendar</a>
-      <a href="/volunteer_login.html">Logout</a>
-    </nav>
+    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <div style="display: flex; align-items: center;">
+        <span id="volunteer-name" style="color: white; font-weight: 600; font-size: 1.1rem; margin-right: 20px;">Welcome, Volunteer</span>
+      </div>
+      <nav style="margin: 0;">
+        <a href="/volunteer/dashboard.html">Dashboard</a>
+        <a href="/volunteer/calendar.html">Calendar</a>
+        <a href="/volunteer_login.html">Logout</a>
+      </nav>
+    </div>
   </header>
 
   <main>
@@ -175,6 +180,11 @@
         if (data && data._id) {
           currentVolunteerId = data._id;
           console.log('Volunteer ID loaded:', currentVolunteerId);
+          // Display volunteer name in header
+          const volunteerNameElement = document.getElementById('volunteer-name');
+          if (volunteerNameElement && data.name) {
+            volunteerNameElement.textContent = `Welcome, ${data.name}`;
+          }
         }
       })
       .catch(err => {
