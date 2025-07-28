@@ -30,6 +30,12 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 // Add debugging for static file serving
 console.log('Static files directory:', path.join(__dirname, '../frontend/public'));
 
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secretkey',
   resave: false,

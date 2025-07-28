@@ -27,8 +27,15 @@ app.get('/test-connection', (req, res) => {
   res.send('Server connection test successful!');
 });
 
-// Add a catch-all route for HTML files
+// Add a catch-all route for HTML files (but not API routes)
 app.get('*.html', (req, res) => {
+  // Skip API routes
+  if (req.path.startsWith('/api/') || req.path.startsWith('/admin/') || 
+      req.path.startsWith('/volunteer/') || req.path.startsWith('/feedback') ||
+      req.path.startsWith('/donate') || req.path.startsWith('/donor')) {
+    return res.status(404).send('API route not found');
+  }
+  
   const filePath = path.join(__dirname, 'frontend/public', req.path);
   console.log('Requested HTML file:', filePath);
   
