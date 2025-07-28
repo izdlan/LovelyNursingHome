@@ -5,24 +5,273 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmation</title>
   <link rel="stylesheet" href="styles2.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f4f7f9 0%, #cfd8e8 100%);
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    
+    .confirmation-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(53,120,199,0.10);
+      overflow: hidden;
+    }
+    
+    .confirmation-header {
+      background: linear-gradient(90deg, #004080 0%, #3578c7 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+    
+    .confirmation-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    
+    .confirmation-header .checkmark {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    .receipt-details {
+      padding: 30px;
+    }
+    
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .receipt-header h2 {
+      color: #3578c7;
+      margin: 0 0 10px 0;
+      font-size: 1.5rem;
+    }
+    
+    .receipt-id {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #64748b;
+      margin: 5px 0;
+    }
+    
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    
+    .receipt-row:last-child {
+      border-bottom: none;
+    }
+    
+    .receipt-label {
+      font-weight: 600;
+      color: #475569;
+    }
+    
+    .receipt-value {
+      color: #1e293b;
+      font-weight: 500;
+    }
+    
+    .amount-highlight {
+      font-size: 1.2rem;
+      color: #3578c7;
+      font-weight: 700;
+    }
+    
+    .receipt-footer {
+      background: #f8fafc;
+      padding: 20px 30px;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .btn {
+      background: linear-gradient(90deg, #3578c7 0%, #004080 100%);
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 7px;
+      font-weight: 600;
+      display: inline-block;
+      margin: 10px;
+      transition: all 0.2s;
+    }
+    
+    .btn:hover {
+      background: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(53,120,199,0.13);
+    }
+    
+    .btn-secondary {
+      background: #6b7280;
+      color: white;
+    }
+    
+    .btn-secondary:hover {
+      background: #4b5563;
+    }
+    
+    .thank-you-message {
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    
+    .thank-you-message p {
+      margin: 0;
+      color: #166534;
+      font-weight: 500;
+    }
+    
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+      
+      .confirmation-header {
+        padding: 20px;
+      }
+      
+      .receipt-details {
+        padding: 20px;
+      }
+      
+      .receipt-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <div class="confirmation-message">
-      <h2 id="confirmation-title">Success!</h2>
-      <p id="confirmation-text">Your action was completed successfully.</p>
-      <a id="confirmation-btn" href="/" class="btn">Return Home</a>
+  <div class="confirmation-container">
+    <div class="confirmation-header">
+      <span class="checkmark">✓</span>
+      <h1 id="confirmation-title">Thank You!</h1>
     </div>
-  </main>
+    
+    <div id="receipt-section" class="receipt-details" style="display: none;">
+      <div class="receipt-header">
+        <h2>Donation Receipt</h2>
+        <div class="receipt-id">Receipt #: <span id="receipt-id"></span></div>
+        <div class="receipt-id">Date: <span id="receipt-date"></span></div>
+      </div>
+      
+      <div class="receipt-body">
+        <div class="receipt-row">
+          <span class="receipt-label">Donor Name:</span>
+          <span class="receipt-value" id="donor-name"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-label">Donation Amount:</span>
+          <span class="receipt-value amount-highlight">RM <span id="donation-amount"></span></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-label">Donation Type:</span>
+          <span class="receipt-value" id="donation-type"></span>
+        </div>
+        <div class="receipt-row">
+          <span class="receipt-label">Payment Method:</span>
+          <span class="receipt-value" id="payment-method"></span>
+        </div>
+        <div class="receipt-row" id="email-row" style="display: none;">
+          <span class="receipt-label">Email:</span>
+          <span class="receipt-value" id="donor-email"></span>
+        </div>
+      </div>
+      
+      <div class="thank-you-message">
+        <p>Your generous donation will help us continue providing quality care to our residents. A confirmation email will be sent to you shortly.</p>
+      </div>
+    </div>
+    
+    <div class="receipt-details" id="simple-confirmation" style="display: none;">
+      <p id="confirmation-text">Your action was completed successfully.</p>
+    </div>
+    
+    <div class="receipt-footer">
+      <a id="confirmation-btn" href="/" class="btn">Return Home</a>
+      <a href="#" onclick="window.print()" class="btn btn-secondary">Print Receipt</a>
+    </div>
+  </div>
+  
   <script>
-    // Optionally, allow dynamic content via query params
+    // Parse URL parameters
     const params = new URLSearchParams(window.location.search);
+    
+    // Update title
     if (params.has('title')) {
       document.getElementById('confirmation-title').textContent = params.get('title');
     }
-    if (params.has('text')) {
-      document.getElementById('confirmation-text').textContent = params.get('text');
+    
+    // Check if this is a donation receipt
+    if (params.has('receiptId')) {
+      // Show receipt section
+      document.getElementById('receipt-section').style.display = 'block';
+      
+      // Populate receipt details
+      document.getElementById('receipt-id').textContent = params.get('receiptId');
+      document.getElementById('receipt-date').textContent = params.get('date');
+      document.getElementById('donor-name').textContent = params.get('donorName');
+      document.getElementById('donation-amount').textContent = params.get('amount');
+      document.getElementById('donation-type').textContent = params.get('donationType') === 'one-time' ? 'One-Time Donation' : 'Monthly Donation';
+      
+      // Format payment method display
+      const paymentMode = params.get('paymentMode');
+      let paymentDisplay = '';
+      switch(paymentMode) {
+        case 'visa':
+          paymentDisplay = 'Visa/MasterCard';
+          break;
+        case 'online':
+          paymentDisplay = 'FPX (Online Banking)';
+          break;
+        case 'qrpay':
+          paymentDisplay = 'QRPay';
+          break;
+        default:
+          paymentDisplay = paymentMode;
+      }
+      document.getElementById('payment-method').textContent = paymentDisplay;
+      
+      // Show email if provided
+      const email = params.get('email');
+      if (email) {
+        document.getElementById('donor-email').textContent = email;
+        document.getElementById('email-row').style.display = 'flex';
+      }
+    } else {
+      // Show simple confirmation
+      document.getElementById('simple-confirmation').style.display = 'block';
+      if (params.has('text')) {
+        document.getElementById('confirmation-text').textContent = params.get('text');
+      }
     }
+    
+    // Update button
     if (params.has('btn') && params.has('href')) {
       const btn = document.getElementById('confirmation-btn');
       btn.textContent = params.get('btn');

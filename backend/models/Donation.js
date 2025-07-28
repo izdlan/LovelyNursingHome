@@ -11,7 +11,8 @@ const donationSchema = new mongoose.Schema({
   donation_amount: Number,
   payment_mode: String,
   consent: String,
-  donation_date: Date
+  donation_date: Date,
+  receipt_id: String
 });
 
 module.exports = mongoose.model('Donation', donationSchema);
