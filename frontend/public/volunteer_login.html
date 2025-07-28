@@ -147,7 +147,7 @@
 
   <main>
     <a href="index.html" class="back-btn">← Back</a>
-    <form id="volunteerLoginForm">
+    <form action="/volunteer/login" method="POST">
       <label>Email:</label>
       <input type="email" name="email" required />
       <br/>
@@ -172,48 +172,10 @@
       }
     });
 
-    // Handle form submission
-    document.getElementById('volunteerLoginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const form = e.target;
-      
-      try {
+    // Show loader when form is submitted
+    document.querySelector('form').addEventListener('submit', function() {
+      if (window.pageLoader) {
         window.pageLoader.show();
-        
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        
-        console.log('Sending volunteer login data:', { email: data.email, password: '***' });
-        
-        const res = await fetch('/volunteer/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-        
-        console.log('Response status:', res.status);
-        
-        if (res.ok) {
-          const result = await res.json();
-          if (result.success) {
-            // Redirect to dashboard
-            window.location.href = result.redirect;
-          } else {
-            alert(result.error || 'Login failed');
-          }
-        } else {
-          // Handle error response
-          const errorData = await res.json();
-          console.error('Login error:', errorData);
-          alert(errorData.error || 'Login failed. Please check your credentials.');
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        alert('Network error. Please try again.');
-      } finally {
-        window.pageLoader.hide();
       }
     });
   </script>

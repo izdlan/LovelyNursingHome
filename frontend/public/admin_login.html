@@ -148,7 +148,7 @@
     </nav>
   </header>
   <main>
-    <form id="adminLoginForm">
+    <form action="/admin/login" method="POST">
       <h2 style="text-align:center; margin:0 0 10px 0;">Admin Login</h2>
       <input type="text" name="username" placeholder="Username" required />
       <input type="password" name="password" placeholder="Password" required />
@@ -168,48 +168,10 @@
       }
     });
 
-    // Handle form submission
-    document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const form = e.target;
-      
-      try {
+    // Show loader when form is submitted
+    document.querySelector('form').addEventListener('submit', function() {
+      if (window.pageLoader) {
         window.pageLoader.show();
-        
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData);
-        
-        console.log('Sending admin login data:', { username: data.username, password: '***' });
-        
-        const res = await fetch('/admin/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        });
-        
-        console.log('Response status:', res.status);
-        
-        if (res.ok) {
-          const result = await res.json();
-          if (result.success) {
-            // Redirect to dashboard
-            window.location.href = result.redirect;
-          } else {
-            alert(result.error || 'Login failed');
-          }
-        } else {
-          // Handle error response
-          const errorData = await res.json();
-          console.error('Login error:', errorData);
-          alert(errorData.error || 'Login failed. Please check your credentials.');
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        alert('Network error. Please try again.');
-      } finally {
-        window.pageLoader.hide();
       }
     });
   </script>
