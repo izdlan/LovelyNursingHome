@@ -92,6 +92,27 @@
       flex-direction: column;
       gap: 8px;
     }
+    
+    #volunteerFields,
+    #adminFields {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
     label {
       font-weight: 600;
       color: #333;
@@ -100,7 +121,8 @@
     input[type="text"],
     input[type="email"],
     input[type="password"],
-    input[type="tel"] {
+    input[type="tel"],
+    select {
       padding: 12px;
       border: 2px solid #e1e5e9;
       border-radius: 6px;
@@ -109,11 +131,14 @@
       font-family: inherit;
       background: #f4f7f9;
       color: #333;
+      width: 100%;
+      box-sizing: border-box;
     }
     input[type="text"]:focus,
     input[type="email"]:focus,
     input[type="password"]:focus,
-    input[type="tel"]:focus {
+    input[type="tel"]:focus,
+    select:focus {
       outline: none;
       border-color: #3578c7;
       box-shadow: 0 0 0 3px rgba(53, 120, 199, 0.08);
@@ -187,46 +212,144 @@
     <h2>Register New User</h2>
     <form id="registerForm">
       <div class="form-group">
-        <label for="fullName">Full Name</label>
-        <input type="text" id="fullName" name="fullName" required placeholder="Enter full name">
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required placeholder="Enter email">
-      </div>
-      <div class="form-group">
-        <label for="phone">Phone</label>
-        <input type="tel" id="phone" name="phone" required placeholder="Enter phone number">
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required placeholder="Enter password">
-      </div>
-      <div class="form-group">
         <label for="role">Role</label>
         <select id="role" name="role" required>
+          <option value="">Select Role</option>
           <option value="volunteer">Volunteer</option>
           <option value="admin">Admin</option>
         </select>
       </div>
-      <button type="submit">Register User</button>
+      
+      <!-- Volunteer Fields -->
+      <div id="volunteerFields" style="display: none;">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Enter full name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+          <label for="icnumber">IC Number</label>
+          <input type="text" id="icnumber" name="icnumber" placeholder="Enter IC number (e.g., 123456-78-9012)">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="Enter phone number">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password">
+        </div>
+      </div>
+      
+      <!-- Admin Fields -->
+      <div id="adminFields" style="display: none;">
+        <div class="form-group">
+          <label for="adminUsername">Username (Email)</label>
+          <input type="email" id="adminUsername" name="adminUsername" placeholder="Enter admin username (email)">
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" name="adminPassword" placeholder="Enter admin password">
+        </div>
+      </div>
+      
+      <button type="submit" id="submitBtn" disabled>Register User</button>
     </form>
     <div id="message" style="margin-top: 20px; padding: 10px; border-radius: 5px; display: none;"></div>
     <a href="/admin/dashboard.html" class="back-link">← Back to Dashboard</a>
   </div>
 
   <script>
+    // Handle role selection to show/hide fields
+    document.getElementById('role').addEventListener('change', function() {
+      const role = this.value;
+      const volunteerFields = document.getElementById('volunteerFields');
+      const adminFields = document.getElementById('adminFields');
+      const submitBtn = document.getElementById('submitBtn');
+      
+      // Hide all fields first
+      volunteerFields.style.display = 'none';
+      adminFields.style.display = 'none';
+      
+      // Clear all form fields
+      document.querySelectorAll('#volunteerFields input, #adminFields input').forEach(input => {
+        input.value = '';
+        input.removeAttribute('required');
+      });
+      
+      if (role === 'volunteer') {
+        volunteerFields.style.display = 'block';
+        volunteerFields.classList.add('fade-in');
+        // Make volunteer fields required
+        document.querySelectorAll('#volunteerFields input').forEach(input => {
+          input.setAttribute('required', 'required');
+        });
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register Volunteer';
+      } else if (role === 'admin') {
+        adminFields.style.display = 'block';
+        adminFields.classList.add('fade-in');
+        // Make admin fields required
+        document.querySelectorAll('#adminFields input').forEach(input => {
+          input.setAttribute('required', 'required');
+        });
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Register Admin';
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Register User';
+      }
+    });
+
+    // IC Number formatting and validation
+    document.getElementById('icnumber').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+      
+      // Format as 123456-78-9012
+      if (value.length >= 6) {
+        value = value.slice(0, 6) + '-' + value.slice(6);
+      }
+      if (value.length >= 9) {
+        value = value.slice(0, 9) + '-' + value.slice(9, 13);
+      }
+      
+      e.target.value = value;
+    });
+
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      // Show loading indicator
+      if (window.pageLoader) {
+        window.pageLoader.show();
+      }
+      
       const formData = new FormData(this);
-      const data = {
-        fullName: formData.get('fullName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        password: formData.get('password'),
-        role: formData.get('role')
-      };
+      const role = formData.get('role');
+      
+      let data = { role };
+      
+      if (role === 'volunteer') {
+        data = {
+          fullName: formData.get('fullName'),
+          email: formData.get('email'),
+          icnumber: formData.get('icnumber'),
+          phone: formData.get('phone'),
+          password: formData.get('password'),
+          role: role
+        };
+      } else if (role === 'admin') {
+        data = {
+          fullName: '', // Not needed for admin
+          email: formData.get('adminUsername'),
+          phone: '', // Not needed for admin
+          password: formData.get('adminPassword'),
+          role: role
+        };
+      }
       
       try {
         const response = await fetch('/admin/register-user', {
@@ -240,6 +363,11 @@
         const result = await response.json();
         const messageDiv = document.getElementById('message');
         
+        // Hide loading indicator
+        if (window.pageLoader) {
+          window.pageLoader.hide();
+        }
+        
         if (response.ok) {
           messageDiv.style.display = 'block';
           messageDiv.style.backgroundColor = '#d4edda';
@@ -247,8 +375,17 @@
           messageDiv.style.border = '1px solid #c3e6cb';
           messageDiv.textContent = result.message;
           
-          // Clear form
+          // Clear form and reset to initial state
           document.getElementById('registerForm').reset();
+          document.getElementById('volunteerFields').style.display = 'none';
+          document.getElementById('adminFields').style.display = 'none';
+          document.getElementById('submitBtn').disabled = true;
+          document.getElementById('submitBtn').textContent = 'Register User';
+          
+          // Auto-hide success message after 5 seconds
+          setTimeout(() => {
+            messageDiv.style.display = 'none';
+          }, 5000);
         } else {
           messageDiv.style.display = 'block';
           messageDiv.style.backgroundColor = '#f8d7da';
@@ -257,6 +394,11 @@
           messageDiv.textContent = result.error || 'Registration failed';
         }
       } catch (error) {
+        // Hide loading indicator on error
+        if (window.pageLoader) {
+          window.pageLoader.hide();
+        }
+        
         const messageDiv = document.getElementById('message');
         messageDiv.style.display = 'block';
         messageDiv.style.backgroundColor = '#f8d7da';

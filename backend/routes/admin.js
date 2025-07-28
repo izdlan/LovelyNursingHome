@@ -196,11 +196,15 @@ router.get('/volunteer-calendar', requireAdminAuth, async (req, res) => {
 // ✅ POST route to register new user (admin only)
 router.post('/register-user', async (req, res) => {
   try {
-    const { fullName, email, phone, password, role } = req.body;
+    const { fullName, email, icnumber, phone, password, role } = req.body;
     
-    // Validate required fields
-    if (!fullName || !email || !phone || !password || !role) {
-      return res.status(400).json({ error: 'All fields are required' });
+    // Validate required fields based on role
+    if (!email || !password || !role) {
+      return res.status(400).json({ error: 'Email, password, and role are required' });
+    }
+    
+    if (role === 'volunteer' && (!fullName || !icnumber || !phone)) {
+      return res.status(400).json({ error: 'Full name, IC number, and phone are required for volunteers' });
     }
     
     // Check if email already exists
@@ -211,31 +215,91 @@ router.post('/register-user', async (req, res) => {
       return res.status(400).json({ error: 'Email already registered' });
     }
     
+    // Hash password
+    const bcrypt = require('bcryptjs');
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
     if (role === 'volunteer') {
       // Create new volunteer (automatically approved since admin is creating)
       const volunteer = new Volunteer({
         fullName,
         email,
+        icnumber,
         phone,
-        password,
+        password: hashedPassword,
         status: 'approved' // Auto-approve since admin is creating
       });
       await volunteer.save();
-      res.json({ success: true, message: 'Volunteer registered successfully' });
+      
+      // Send welcome email to new volunteer
+      try {
+        const { sendEmail } = require('../services/emailNotifier');
+        const subject = 'Welcome to Lovely Nursing Home - Volunteer Account Created';
+        const emailBody = `Dear ${fullName},
+
+Welcome to Lovely Nursing Home!
+
+Your volunteer account has been created and approved. Here are your login details:
+
+Email: ${email}
+Password: ${password}
+
+You can now log in at: ${req.protocol}://${req.get('host')}/volunteer_login.html
+
+Thank you for your willingness to serve our community!
+
+Best regards,
+Lovely Nursing Home Team`;
+        
+        await sendEmail(email, subject, emailBody);
+        console.log('Welcome email sent to:', email);
+      } catch (emailError) {
+        console.error('Failed to send welcome email:', emailError);
+        // Don't fail the registration if email fails
+      }
+      
+      res.json({ success: true, message: 'Volunteer registered successfully and welcome email sent!' });
     } else if (role === 'admin') {
       // Create new admin
       const admin = new Admin({
         username: email,
-        password
+        password: hashedPassword
       });
       await admin.save();
-      res.json({ success: true, message: 'Admin registered successfully' });
+      
+      // Send admin account details email
+      try {
+        const { sendEmail } = require('../services/emailNotifier');
+        const subject = 'Lovely Nursing Home - Admin Account Created';
+        const emailBody = `Dear ${fullName || 'Admin'},
+
+Your admin account has been created for Lovely Nursing Home.
+
+Login details:
+Username: ${email}
+Password: ${password}
+
+Admin Dashboard: ${req.protocol}://${req.get('host')}/admin_login.html
+
+Please keep these credentials secure.
+
+Best regards,
+Lovely Nursing Home Team`;
+        
+        await sendEmail(email, subject, emailBody);
+        console.log('Admin credentials email sent to:', email);
+      } catch (emailError) {
+        console.error('Failed to send admin email:', emailError);
+        // Don't fail the registration if email fails
+      }
+      
+      res.json({ success: true, message: 'Admin registered successfully and credentials email sent!' });
     } else {
       res.status(400).json({ error: 'Invalid role specified' });
     }
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({ error: 'Failed to register user' });
+    res.status(500).json({ error: 'Failed to register user: ' + error.message });
   }
 });
 
