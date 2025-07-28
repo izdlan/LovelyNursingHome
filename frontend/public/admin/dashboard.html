@@ -202,6 +202,43 @@
         credentials: 'include'
       });
       const activities = await res.json();
+      
+      // Auto-archive activities with past dates
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+      
+      let archivedCount = 0;
+      const archivedActivities = [];
+      
+      for (const activity of activities) {
+        const activityDate = new Date(activity.date);
+        activityDate.setHours(0, 0, 0, 0); // Set to start of day for accurate comparison
+        
+        // If activity date is in the past and status is still active, auto-archive it
+        if (activityDate < today && activity.status === 'active') {
+          try {
+            await fetch(`/admin/api/activities/${activity._id}/status`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify({ status: 'archived' })
+            });
+            activity.status = 'archived'; // Update local status for display
+            archivedCount++;
+            archivedActivities.push(activity.title);
+          } catch (error) {
+            console.error('Failed to auto-archive activity:', activity.title, error);
+          }
+        }
+      }
+      
+      // Show notification if activities were auto-archived
+      if (archivedCount > 0) {
+        showDashboardConfirmation(`${archivedCount} past activity(ies) automatically archived: ${archivedActivities.join(', ')}`);
+      }
+      
       const list = document.getElementById('activities-list');
       list.innerHTML = '';
       for (const activity of activities) {
