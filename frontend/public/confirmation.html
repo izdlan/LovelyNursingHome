@@ -214,7 +214,7 @@
     
     <div class="receipt-footer">
       <a id="confirmation-btn" href="/" class="btn">Return Home</a>
-      <a href="#" onclick="window.print()" class="btn btn-secondary">Print Receipt</a>
+      <a id="print-receipt-btn" href="#" onclick="window.print()" class="btn btn-secondary" style="display: none;">Print Receipt</a>
     </div>
   </div>
   
@@ -231,6 +231,9 @@
     if (params.has('receiptId')) {
       // Show receipt section
       document.getElementById('receipt-section').style.display = 'block';
+      
+      // Show print receipt button only for donations
+      document.getElementById('print-receipt-btn').style.display = 'inline-block';
       
       // Populate receipt details
       document.getElementById('receipt-id').textContent = params.get('receiptId');
@@ -269,6 +272,7 @@
       if (params.has('text')) {
         document.getElementById('confirmation-text').textContent = params.get('text');
       }
+      // Print receipt button remains hidden for non-donation confirmations
     }
     
     // Update button
