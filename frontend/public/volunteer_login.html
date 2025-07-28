@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Volunteer Login - Lovely Nursing Home</title>
   <link rel="stylesheet" href="styles2.css">
-  <script src="/loading.js"></script>
   <script src="/notification.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -163,5 +162,15 @@
   <footer>
     <p>&copy; 2025 Lovely Nursing Home. All Rights Reserved.</p>
   </footer>
+  
+  <script src="/loading.js"></script>
+  <script>
+    // Hide loader after page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.pageLoader) {
+        window.pageLoader.hide();
+      }
+    });
+  </script>
 </body>
 </html>

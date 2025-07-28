@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <title>Admin Login</title>
   <link rel="stylesheet" href="styles2.css">
-  <script src="/loading.js"></script>
   <script src="/notification.js"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
@@ -159,5 +158,15 @@
   <footer>
     &copy; 2024 Lovely Nursing Home. All rights reserved.
   </footer>
+  
+  <script src="/loading.js"></script>
+  <script>
+    // Hide loader after page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.pageLoader) {
+        window.pageLoader.hide();
+      }
+    });
+  </script>
 </body>
 </html>
