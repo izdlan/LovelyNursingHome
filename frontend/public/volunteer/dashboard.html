@@ -394,9 +394,9 @@
               }
               
               return `<tr>
-                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.title || '-'}</td>
-                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${activityDate ? activityDate.toLocaleDateString() : '-'}</td>
-                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.time || '-'}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.title || ''}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${activityDate ? activityDate.toLocaleDateString() : ''}</td>
+                <td style='padding: 10px; border-bottom: 1px solid #eee;'>${b.activity?.time || ''}</td>
                 <td style='padding: 10px; border-bottom: 1px solid #eee; color: ${isPastActivity ? '#6b7280' : '#059669'};'>${statusToShow}</td>
               </tr>`;
             }).join('')}
