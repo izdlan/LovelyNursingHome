@@ -5,8 +5,29 @@ exports.submitFeedback = async (req, res) => {
     try {
         console.log('=== FEEDBACK SUBMISSION START ===');
         console.log('Request body:', req.body);
+        console.log('Request headers:', req.headers);
         
-        const { name, email, message } = req.body;
+        // Handle both form data and JSON data
+        let name, email, message;
+        
+        if (req.body) {
+            // If req.body exists, extract from it
+            name = req.body.name;
+            email = req.body.email;
+            message = req.body.message;
+        } else {
+            // If req.body is undefined, try to parse from raw body
+            console.log('req.body is undefined, trying to parse raw body...');
+            const rawBody = req.rawBody || '';
+            console.log('Raw body:', rawBody);
+            
+            // Try to parse as URL-encoded form data
+            const urlParams = new URLSearchParams(rawBody);
+            name = urlParams.get('name');
+            email = urlParams.get('email');
+            message = urlParams.get('message');
+        }
+        
         console.log('Extracted data:', { name, email, message });
         
         // Validate required fields

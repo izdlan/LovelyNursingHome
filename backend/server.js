@@ -36,6 +36,19 @@ app.use((req, res, next) => {
   next();
 });
 
+// Add raw body capture middleware for debugging
+app.use((req, res, next) => {
+  let data = '';
+  req.on('data', chunk => {
+    data += chunk;
+  });
+  req.on('end', () => {
+    req.rawBody = data;
+    console.log('Raw body captured:', data);
+    next();
+  });
+});
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'secretkey',
   resave: false,
