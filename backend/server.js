@@ -73,50 +73,77 @@ app.get('/', (req, res) => {
 
 // ✅ Volunteer Login
 app.post('/volunteer/login', async (req, res) => {
+  console.log('=== VOLUNTEER LOGIN START ===');
+  console.log('Request body:', req.body);
+  console.log('Request headers:', req.headers);
+  
   try {
     const { email, password } = req.body;
+    console.log('Extracted email:', email);
+    
     const volunteer = await Volunteer.findOne({ email });
+    console.log('Volunteer found:', volunteer ? 'Yes' : 'No');
 
     if (!volunteer) {
+      console.log('Volunteer not found, redirecting...');
       return res.redirect('/confirmation.html?title=Volunteer+Not+Found&text=No+volunteer+account+found+with+that+email.&btn=Try+Again&href=%2Fvolunteer_login.html');
     }
 
     const isMatch = await bcrypt.compare(password, volunteer.password);
+    console.log('Password match:', isMatch);
+
     if (!isMatch) {
+      console.log('Password incorrect, redirecting...');
       return res.redirect('/confirmation.html?title=Incorrect+Password&text=The+password+you+entered+is+incorrect.&btn=Try+Again&href=%2Fvolunteer_login.html');
     }
 
     if (volunteer.status !== 'approved') {
+      console.log('Volunteer not approved, redirecting...');
       return res.redirect('/confirmation.html?title=Pending+Approval&text=Your+account+is+awaiting+admin+approval.&btn=Back+to+Login&href=%2Fvolunteer_login.html');
     }
 
     req.session.volunteer = volunteer;
+    console.log('Volunteer login successful, redirecting to dashboard...');
     res.redirect('/volunteer/dashboard.html');
   } catch (err) {
-    console.error(err);
+    console.error('=== VOLUNTEER LOGIN ERROR ===');
+    console.error('Error details:', err);
     res.redirect('/confirmation.html?title=Login+Error&text=An+error+occurred+during+login.+Please+try+again.&btn=Back+to+Login&href=%2Fvolunteer_login.html');
   }
 });
 
 // Admin Login
 app.post('/admin/login', async (req, res) => {
+  console.log('=== ADMIN LOGIN START ===');
+  console.log('Request body:', req.body);
+  console.log('Request headers:', req.headers);
+  
   const { username, password } = req.body;
+  console.log('Extracted username:', username);
 
   try {
     const admin = await Admin.findOne({ username });
+    console.log('Admin found:', admin ? 'Yes' : 'No');
+    
     if (!admin) {
+      console.log('Admin not found, redirecting...');
       return res.redirect('/confirmation.html?title=Admin+Not+Found&text=No+admin+account+found+with+that+username.&btn=Try+Again&href=%2Fadmin_login.html');
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log('Password match:', isMatch);
+    
     if (!isMatch) {
+      console.log('Password incorrect, redirecting...');
       return res.redirect('/confirmation.html?title=Incorrect+Password&text=The+password+you+entered+is+incorrect.&btn=Try+Again&href=%2Fadmin_login.html');
     }
 
     req.session.admin = admin;
+    console.log('Admin login successful, redirecting to dashboard...');
     res.redirect('/admin/dashboard.html');
   } catch (err) {
-    console.error(err);
+    console.error('=== ADMIN LOGIN ERROR ===');
+    console.error('Error details:', err);
     res.redirect('/confirmation.html?title=Server+Error&text=An+error+occurred+during+login.+Please+try+again.&btn=Back+to+Login&href=%2Fadmin_login.html');
   }
 });
