@@ -71,9 +71,5 @@ app.get('*.html', (req, res) => {
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  console.log(`Static files being served from: ${path.join(__dirname, 'frontend/public')}`);
-}); 
+// Export the app for Vercel (don't call listen in serverless)
+module.exports = app; 
