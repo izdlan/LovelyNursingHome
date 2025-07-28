@@ -22,9 +22,10 @@ exports.submitFeedback = async (req, res) => {
             // Don't fail the feedback submission if email fails
         }
         
-        res.status(201).json({ message: 'Feedback submitted successfully' });
+        // Redirect like add activity does
+        res.redirect('/confirmation.html?title=Feedback+Submitted!&text=Thank+you+for+your+feedback.+We+will+get+back+to+you+soon.&btn=Submit+Another+Feedback&href=%2Ffeedback.html');
     } catch (error) {
-        res.status(500).json({ message: 'Error submitting feedback', error });
+        res.redirect('/confirmation.html?title=Error!&text=There+was+an+error+submitting+your+feedback.+Please+try+again.&btn=Try+Again&href=%2Ffeedback.html');
     }
 };
 

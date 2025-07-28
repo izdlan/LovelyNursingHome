@@ -184,39 +184,35 @@
     </footer>
     <script src="/loading.js"></script>
     <script>
-        // Use Express backend endpoint (like add activity)
-        const FEEDBACK_API_URL = '/feedback';
-
+        // Handle form submission like add activity
         document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
             const msgDiv = document.getElementById('feedbackMsg');
+            
             try {
-                const data = {
-                    name: form.name.value,
-                    email: form.email.value,
-                    message: form.message.value
-                };
-                console.log('Sending feedback data:', data);
-                const res = await fetch(FEEDBACK_API_URL, {
+                // Use FormData like add activity form
+                const formData = new FormData(form);
+                
+                console.log('Sending feedback data:', Object.fromEntries(formData));
+                
+                const res = await fetch('/feedback', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: formData
                 });
+                
                 console.log('Response status:', res.status);
+                
                 if (res.ok) {
-                    const result = await res.json();
+                    const result = await res.text();
                     msgDiv.style.color = '#2563eb';
-                    msgDiv.textContent = result.message || 'Thank you for your feedback!';
+                    msgDiv.textContent = 'Thank you for your feedback!';
                     form.reset();
                 } else {
-                    const errorData = await res.json().catch(() => ({}));
+                    const errorData = await res.text();
                     console.error('Error response:', errorData);
                     msgDiv.style.color = '#d32f2f';
-                    msgDiv.textContent = errorData.message ? `Error: ${errorData.message}` : `HTTP ${res.status}: There was an error submitting your feedback.`;
-                    if (errorData.error) {
-                        msgDiv.textContent += ` (${errorData.error.message || errorData.error})`;
-                    }
+                    msgDiv.textContent = `HTTP ${res.status}: There was an error submitting your feedback.`;
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
